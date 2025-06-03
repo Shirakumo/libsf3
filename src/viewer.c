@@ -121,7 +121,7 @@ int view_model(struct sf3_model *model){
   if(model->vertex_format & SF3_VERTEX_NORMAL) printf(" normal");
   if(model->vertex_format & SF3_VERTEX_TANGENT) printf(" tangent");
   printf("\nTextures:\n");
-  sf3_str16 *texture = &model->textures[0];
+  const sf3_str16 *texture = &model->textures[0];
   for(uint8_t i=0; i<sf3_model_texture_count(model); ++i){
     printf("%16s %s\n",
            sf3_model_material_type(sf3_model_texture_material(model, i)),
@@ -199,6 +199,105 @@ int view_physics_model(struct sf3_physics_model *physics_model){
 }
 
 int view_table(struct sf3_table *table){
+  printf("%d columns, %lu rows\n",
+         table->column_count,
+         table->row_count);
+  printf("Columns:\n");
+  const struct sf3_column_spec *spec = &table->columns[0];
+  for(uint16_t i=0; i<table->column_count; ++i){
+    printf(" %4d %s\n     Type: %s\n     Octets: %d\n     Elements: %d\n",
+           i,
+           spec->name.str,
+           sf3_table_column_type(spec->type),
+           spec->length,
+           sf3_table_element_count(spec));
+    spec = sf3_table_next_column(spec);
+  }
+  
+  uint16_t length = 1 + table->column_count * 19;
+  printf("Data:\n┌");
+  for(uint16_t i=0; i<table->column_count; ++i){
+    if(0<i) printf("┬");
+    for(uint16_t j=0; j<18; ++j) printf("─");
+  }
+  printf("┐\n");
+  spec = &table->columns[0];
+  for(uint16_t i=0; i<table->column_count; ++i){
+    printf("│ %16.16s ", spec->name.str);
+    spec = sf3_table_next_column(spec);
+  }
+  printf("│\n├");
+  for(uint16_t i=0; i<table->column_count; ++i){
+    if(0<i) printf("┼");
+    for(uint16_t j=0; j<18; ++j) printf("─");
+  }
+  printf("┤\n");
+  for(uint64_t r=0; r<table->row_count; ++r){
+    printf("│ ");
+    for(uint64_t c=0; c<table->column_count; ++c){
+      if(0<c) printf(" │ ");
+      const char *data = sf3_table_cell(table, r, c, &spec);
+      for(uint16_t e=0; e<sf3_table_element_count(spec); ++e){
+        switch(spec->type){
+        case SF3_COLUMN_UINT8:
+          printf("%16u", *((uint8_t*)data));
+          break;
+        case SF3_COLUMN_UINT16:
+          printf("%16u", *((uint16_t*)data));
+          break;
+        case SF3_COLUMN_UINT32:
+          printf("%16u", *((uint32_t*)data));
+          break;
+        case SF3_COLUMN_UINT64:
+          printf("%16lu", *((uint64_t*)data));
+          break;
+        case SF3_COLUMN_INT8:
+          printf("%16d", *((int8_t*)data));
+          break;
+        case SF3_COLUMN_INT16:
+          printf("%16d", *((int16_t*)data));
+          break;
+        case SF3_COLUMN_INT32:
+          printf("%16d", *((int32_t*)data));
+          break;
+        case SF3_COLUMN_INT64:
+          printf("%16ld", *((int64_t*)data));
+          break;
+        case SF3_COLUMN_FLOAT16:
+          break;
+        case SF3_COLUMN_FLOAT32:
+          printf("%16.4f", *((float*)data));
+          break;
+        case SF3_COLUMN_FLOAT64:
+          printf("%16.4f", *((double*)data));
+          break;
+        case SF3_COLUMN_STRING:
+          printf("%16.16s", ((char*)data));
+          break;
+        case SF3_COLUMN_TIMESTAMP:
+          printf("%16.16s", ctime((time_t*)data));
+          break;
+        case SF3_COLUMN_HIGH_RESOLUTION_TIMESTAMP:{
+          uint64_t nanos = *((uint64_t*)data);
+          uint64_t seconds = nanos / 1000000000;
+          printf("%16.16s", ctime(&seconds));
+          break;
+        }
+        case SF3_COLUMN_BOOLEAN:
+          printf("%16.16s", ((char*)data) ? "True" : "False");
+          break;
+        }
+        data += sf3_table_element_size(spec);
+      }
+    }
+    printf(" │\n");
+  }
+  printf("└");
+  for(uint16_t i=0; i<table->column_count; ++i){
+    if(0<i) printf("┴");
+    for(uint16_t j=0; j<18; ++j) printf("─");
+  }
+  printf("┘\n");
   return 1;
 }
 

@@ -54,7 +54,7 @@ const struct sf3_column_spec *sf3_table_column(const struct sf3_table *table, ui
 
 const char *sf3_table_row(const struct sf3_table *table, uint64_t row){
   if(table->row_count <= row) return 0;
-  return sf3_table_data(table)+(table->row_count*row);
+  return sf3_table_data(table)+(table->row_length*row);
 }
 
 const char *sf3_table_cell(const struct sf3_table *table, uint64_t row, uint64_t column, const struct sf3_column_spec **spec){
@@ -77,4 +77,25 @@ uint8_t sf3_table_element_size(const struct sf3_column_spec *column){
 uint32_t sf3_table_element_count(const struct sf3_column_spec *column){
   if(column->type == SF3_COLUMN_STRING) return 1;
   return column->length / (column->type & 0x0F);
+}
+
+const char* sf3_table_column_type(enum sf3_column_type type){
+  switch(type){
+  case SF3_COLUMN_UINT8: return "uint8";
+  case SF3_COLUMN_UINT16: return "uint16";
+  case SF3_COLUMN_UINT32: return "uint32";
+  case SF3_COLUMN_UINT64: return "uint64";
+  case SF3_COLUMN_INT8: return "int8";
+  case SF3_COLUMN_INT16: return "int16";
+  case SF3_COLUMN_INT32: return "int32";
+  case SF3_COLUMN_INT64: return "int64";
+  case SF3_COLUMN_FLOAT16: return "float16";
+  case SF3_COLUMN_FLOAT32: return "float32";
+  case SF3_COLUMN_FLOAT64: return "float64";
+  case SF3_COLUMN_STRING: return "string";
+  case SF3_COLUMN_TIMESTAMP: return "timestamp";
+  case SF3_COLUMN_HIGH_RESOLUTION_TIMESTAMP: return "high resolution timestamp";
+  case SF3_COLUMN_BOOLEAN: return "boolean";
+  default: return "Unknown";
+  }
 }
