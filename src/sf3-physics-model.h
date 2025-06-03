@@ -63,19 +63,31 @@ struct __attribute__((packed)) sf3_physics_model{
 };
 
 const struct sf3_physics_shape *sf3_physics_model_next_shape(const struct sf3_physics_shape *shape){
+  const char *base = (char*)shape;
   switch(shape->type){
   case SF3_PHYSICS_SHAPE_ELLIPSOID:
-    return (const struct sf3_physics_shape *)((const struct sf3_shape_ellipsoid *)shape)+1;
+    return (const struct sf3_physics_shape *)(base+sizeof(struct sf3_shape_ellipsoid));
   case SF3_PHYSICS_SHAPE_BOX:
-    return (const struct sf3_physics_shape *)((const struct sf3_shape_box *)shape)+1;
+    return (const struct sf3_physics_shape *)(base+sizeof(struct sf3_shape_box));
   case SF3_PHYSICS_SHAPE_CYLINDER:
-    return (const struct sf3_physics_shape *)((const struct sf3_shape_cylinder *)shape)+1;
+    return (const struct sf3_physics_shape *)(base+sizeof(struct sf3_shape_cylinder));
   case SF3_PHYSICS_SHAPE_PILL:
-    return (const struct sf3_physics_shape *)((const struct sf3_shape_pill *)shape)+1;
+    return (const struct sf3_physics_shape *)(base+sizeof(struct sf3_shape_pill));
   case SF3_PHYSICS_SHAPE_MESH:{
     const struct sf3_shape_mesh *mesh = (const struct sf3_shape_mesh *)shape;
     return (const struct sf3_physics_shape *)(mesh->vertices+mesh->count);
   }
   default: return 0;
+  }
+}
+
+const char *sf3_physics_shape_type(enum sf3_physics_shape_type type){
+  switch(type){
+  case SF3_PHYSICS_SHAPE_ELLIPSOID: return "ellipsoid";
+  case SF3_PHYSICS_SHAPE_BOX: return "box";
+  case SF3_PHYSICS_SHAPE_CYLINDER: return "cylinder";
+  case SF3_PHYSICS_SHAPE_PILL: return "pill";
+  case SF3_PHYSICS_SHAPE_MESH: return "mesh";
+  default: return "Unknown";
   }
 }

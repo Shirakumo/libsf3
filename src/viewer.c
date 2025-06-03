@@ -146,6 +146,55 @@ int view_model(struct sf3_model *model){
 }
 
 int view_physics_model(struct sf3_physics_model *physics_model){
+  printf("Mass: %f\n",
+         physics_model->mass);
+  printf("Tensor:");
+  for(uint8_t i=0; i<9; ++i){
+    if(i%3 == 0) printf("\n");
+    printf(" %f", physics_model->tensor[i]);
+  }
+  printf("\n%d shapes:\n", physics_model->shape_count);
+  const struct sf3_physics_shape *shape = &physics_model->shapes[0];
+  for(uint16_t i=0; i<physics_model->shape_count; ++i){
+    printf(" %4d %s\n", i, sf3_physics_shape_type(shape->type));
+    switch(shape->type){
+    case SF3_PHYSICS_SHAPE_ELLIPSOID:
+      printf("  w: %f h: %f d: %f\n",
+             ((struct sf3_shape_ellipsoid *)shape)->w,
+             ((struct sf3_shape_ellipsoid *)shape)->h,
+             ((struct sf3_shape_ellipsoid *)shape)->d);
+      break;
+    case SF3_PHYSICS_SHAPE_BOX:
+      printf("  w: %f h: %f d: %f\n",
+             ((struct sf3_shape_box *)shape)->w,
+             ((struct sf3_shape_box *)shape)->h,
+             ((struct sf3_shape_box *)shape)->d);
+      break;
+    case SF3_PHYSICS_SHAPE_CYLINDER:
+      printf("  br: %f tr: %f h: %f\n",
+             ((struct sf3_shape_cylinder *)shape)->bottom_radius,
+             ((struct sf3_shape_cylinder *)shape)->top_radius,
+             ((struct sf3_shape_cylinder *)shape)->height);
+      break;
+    case SF3_PHYSICS_SHAPE_PILL:
+      printf("  br: %f tr: %f h: %f\n",
+             ((struct sf3_shape_pill *)shape)->bottom_radius,
+             ((struct sf3_shape_pill *)shape)->top_radius,
+             ((struct sf3_shape_pill *)shape)->height);
+      break;
+    case SF3_PHYSICS_SHAPE_MESH: {
+      struct sf3_shape_mesh *mesh = (struct sf3_shape_mesh *)shape;
+      for(uint16_t v=0; v<mesh->count; ++v){
+        printf("  %f %f %f\n",
+               mesh->vertices[v*3+0],
+               mesh->vertices[v*3+1],
+               mesh->vertices[v*3+2]);
+      }
+      break;
+    }
+    }
+    shape = sf3_physics_model_next_shape(shape);
+  }
   return 1;
 }
 
