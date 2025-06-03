@@ -2,7 +2,7 @@
 
 #define SF3_FORMAT_ID_VECTOR_GRAPHIC 0x09
 
-enum sf3_vector_instruction{
+enum sf3_vector_instruction_type{
   SF3_INSTRUCTION_LINE = 0x01,
   SF3_INSTRUCTION_RECTANGLE = 0x02,
   SF3_INSTRUCTION_CIRCLE = 0x03,
@@ -35,6 +35,8 @@ struct sf3_shape_outline{
   struct sf3_point edges[];
 };
 
+#define SF3_SKIP_OUTLINE(OUTLINE) ((OUTLINE).edges+(OUTLINE).count)
+
 struct sf3_shape_bounds{
   float x;
   float y;
@@ -58,33 +60,33 @@ struct sf3_text_instruction{
 
 struct sf3_curve_instruction{
   uint8_t type;
-  struct sf3_shape_outline outline;
   struct sf3_shape_fill fill;
+  struct sf3_shape_outline outline;
 };
 
 struct sf3_polygon_instruction{
   uint8_t type;
-  struct sf3_shape_outline outline;
   struct sf3_shape_fill fill;
+  struct sf3_shape_outline outline;
 };
 
 struct sf3_circle_instruction{
   uint8_t type;
-  struct sf3_shape_bounds bounds;
   struct sf3_shape_fill fill;
+  struct sf3_shape_bounds bounds;
 };
 
 struct sf3_rectangle_instruction{
   uint8_t type;
-  struct sf3_shape_bounds bounds;
   struct sf3_shape_fill fill;
+  struct sf3_shape_bounds bounds;
 };
 
 struct sf3_line_instruction{
   uint8_t type;
-  struct sf3_shape_outline outline;
   struct sf3_color color;
   float thickness;
+  struct sf3_shape_outline outline;
 };
 
 struct sf3_matrix_instruction{
@@ -105,26 +107,24 @@ struct sf3_vector_graphic{
   uint32_t width;
   uint32_t height;
   uint32_t count;
-  struct sf3_vector_instruction[];
+  struct sf3_vector_instruction instructions[];
 };
 
 const struct sf3_vector_instruction *sf3_vector_graphic_next_instruction(const struct sf3_vector_instruction *instruction){
   switch(instruction->type){
-  case SF3_INSTRUCTION_LINE:
-    return (struct sf3_vector_instruction *)((struct sf3_line_instruction *)instruction)+1;
   case SF3_INSTRUCTION_RECTANGLE:
     return (struct sf3_vector_instruction *)((struct sf3_rectangle_instruction *)instruction)+1;
   case SF3_INSTRUCTION_CIRCLE:
     return (struct sf3_vector_instruction *)((struct sf3_circle_instruction *)instruction)+1;
+  case SF3_INSTRUCTION_LINE:
+    return (struct sf3_vector_instruction *)SF3_SKIP_OUTLINE(((struct sf3_line_instruction *)instruction)->outline);
   case SF3_INSTRUCTION_POLYGON:
-    return (struct sf3_vector_instruction *)((struct sf3_polygon_instruction *)instruction)+1;
+    return (struct sf3_vector_instruction *)SF3_SKIP_OUTLINE(((struct sf3_polygon_instruction *)instruction)->outline);
   case SF3_INSTRUCTION_CURVE:
-    return (struct sf3_vector_instruction *)((struct sf3_curve_instruction *)instruction)+1;
+    return (struct sf3_vector_instruction *)SF3_SKIP_OUTLINE(((struct sf3_curve_instruction *)instruction)->outline);
   case SF3_INSTRUCTION_TEXT:{
-    // More complex logic is necessary due to the variable-length of the instruction.
     const struct sf3_text_instruction *i = (struct sf3_text_instruction *)instruction;
-    sf3_str16 *string = ((char*)&instruction->font.str)+instruction->font.length;
-    return (struct sf3_vector_instruction *)(string->str+string->length);
+    return (struct sf3_vector_instruction *)(SF3_SKIP_STRP((sf3_str16 *)SF3_SKIP_STR(i->font)));
   }
   case SF3_INSTRUCTION_IDENTITY:
     return (struct sf3_vector_instruction *)((struct sf3_identity_instruction *)instruction)+1;
@@ -135,7 +135,7 @@ const struct sf3_vector_instruction *sf3_vector_graphic_next_instruction(const s
   }
 }
 
-const char *sf3_text_instruction_string(const struct sf3_text_instruction instruction){
-  sf3_str16 *string = ((char*)&instruction->font.str)+instruction->font.length;
-  return string.str;
+const char *sf3_text_instruction_string(const struct sf3_text_instruction *instruction){
+  const sf3_str16 *string = (sf3_str16*)SF3_SKIP_STR(instruction->font);
+  return string->str;
 }

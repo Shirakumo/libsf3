@@ -25,6 +25,8 @@ typedef struct sf3_str64{
   char str[];
 } sf3_str64;
 
+#define SF3_SKIP_STR(STR) ((STR).str+(STR).length)
+#define SF3_SKIP_STRP(STR) ((STR)->str+(STR)->length)
 #define SF3_MAGIC {0x81, 0x53, 0x46, 0x33, 0x00, 0xE0, 0xD0, 0x0D, 0x0A, 0x0A}
 
 struct sf3_identifier{

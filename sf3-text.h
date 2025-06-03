@@ -13,6 +13,7 @@ enum sf3_markup_option_type{
   SF3_MARKUP_HEADING = 0x08,
   SF3_MARKUP_LINK = 0x09,
   SF3_MARKUP_TARGET = 0x0A,
+  SF3_MARKUP_FONT = 0x0B,
 };
 
 struct sf3_markup{
@@ -48,10 +49,15 @@ struct sf3_markup_target{
   sf3_str16 address;
 };
 
+struct sf3_markup_font{
+  struct sf3_markup markup;
+  sf3_str16 font;
+};
+
 struct sf3_text{
   struct sf3_identifier identifier;
   uint64_t markup_size;
-  uint32_t markup_count
+  uint32_t markup_count;
   struct sf3_markup markup[];
 };
 
@@ -70,9 +76,11 @@ const struct sf3_markup *sf3_text_next_markup(const struct sf3_markup *markup){
   case SF3_MARKUP_HEADING:
     return (struct sf3_markup *) ((struct sf3_markup_heading *)markup)+1;
   case SF3_MARKUP_LINK:
-    return (struct sf3_markup *) ((struct sf3_markup_link *)markup)+1;
+    return (struct sf3_markup *) SF3_SKIP_STR(((struct sf3_markup_link *)markup)->address);
   case SF3_MARKUP_TARGET:
-    return (struct sf3_markup *) ((struct sf3_markup_target *)markup)+1;
+    return (struct sf3_markup *) SF3_SKIP_STR(((struct sf3_markup_target *)markup)->address);
+  case SF3_MARKUP_FONT:
+    return (struct sf3_markup *) SF3_SKIP_STR(((struct sf3_markup_font *)markup)->font);
   default:
     return 0;
   }
