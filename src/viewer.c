@@ -81,6 +81,31 @@ int view_image(struct sf3_image *image){
 }
 
 int view_log(struct sf3_log *log){
+  time_t start = log->start;
+  printf("Start: %s", ctime(&start));
+  if(log->end == INT64_MAX) printf("End:   (none)\n");
+  else printf("End:   %s", ctime(&log->end));
+  printf("%d chunks:\n", log->chunk_count);
+  const struct sf3_log_chunk *chunk = &log->chunks[0];
+  for(uint16_t i=0; i<log->chunk_count; ++i){
+    printf("Chunk %d (%lu bytes, %d entries)\n",
+           i, chunk->size, chunk->entry_count);
+    for(uint32_t e=0; e<chunk->entry_count; ++e){
+      char tstamp[128] = {0};
+      const struct sf3_log_entry *entry = sf3_log_entry(chunk, e);
+      time_t time = start + entry->time/1000;
+      uint32_t millis = entry->time % 1000;
+      strftime(tstamp, 32, "%F %T", gmtime(&time));
+      printf(" %s.%03d [%+3d] %s <%s> %s\n",
+             tstamp,
+             millis,
+             entry->severity,
+             sf3_log_entry_source(entry),
+             sf3_log_entry_category(entry),
+             sf3_log_entry_message(entry));
+    }
+    chunk = sf3_log_next_chunk(chunk);
+  }
   return 1;
 }
 
