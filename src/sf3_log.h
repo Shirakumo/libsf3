@@ -2,20 +2,20 @@
 
 #define SF3_FORMAT_ID_LOG 0x04
 
-struct __attribute__((packed)) sf3_log_entry{
+struct PACK sf3_log_entry{
   uint32_t size;
   uint64_t time;
   uint8_t severity;
   sf3_str8 source;
 };
 
-struct __attribute__((packed)) sf3_log_chunk{
+struct PACK sf3_log_chunk{
   uint64_t size;
   uint32_t entry_count;
   uint64_t entry_offset[];
 };
 
-struct __attribute__((packed)) sf3_log{
+struct PACK sf3_log{
   struct sf3_identifier identifier;
   int64_t start;
   int64_t end;

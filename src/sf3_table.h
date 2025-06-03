@@ -20,13 +20,13 @@ enum sf3_column_type{
   SF3_COLUMN_BOOLEAN = 0x61,
 };
 
-struct __attribute__((packed)) sf3_column_spec{
+struct PACK sf3_column_spec{
   uint32_t length;
   uint8_t type;
   sf3_str16 name;
 };
 
-struct __attribute__((packed)) sf3_table{
+struct PACK sf3_table{
   struct sf3_identifier identifier;
   uint16_t column_count;
   uint64_t row_length;

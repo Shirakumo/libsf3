@@ -21,17 +21,17 @@ enum sf3_vertex_format{
   SF3_VERTEX_TANGENT = 0x10,
 };
 
-struct __attribute__((packed)) sf3_faces{
+struct PACK sf3_faces{
   uint32_t count;
   uint32_t faces[];
 };
 
-struct __attribute__((packed)) sf3_vertices{
+struct PACK sf3_vertices{
   uint32_t count;
   float vertices[];
 };
 
-struct __attribute__((packed)) sf3_model{
+struct PACK sf3_model{
   struct sf3_identifier identifier;
   uint8_t vertex_format;
   uint8_t material_type;

@@ -16,45 +16,45 @@ enum sf3_markup_option_type{
   SF3_MARKUP_FONT = 0x0B,
 };
 
-struct __attribute__((packed)) sf3_markup{
+struct PACK sf3_markup{
   uint64_t start;
   uint64_t end;
   uint8_t option_type;
 };
 
-struct __attribute__((packed)) sf3_markup_color{
+struct PACK sf3_markup_color{
   struct sf3_markup markup;
   float r;
   float g;
   float b;
 };
 
-struct __attribute__((packed)) sf3_markup_size{
+struct PACK sf3_markup_size{
   struct sf3_markup markup;
   float size;
 };
 
-struct __attribute__((packed)) sf3_markup_heading{
+struct PACK sf3_markup_heading{
   struct sf3_markup markup;
   uint8_t level;
 };
 
-struct __attribute__((packed)) sf3_markup_link{
+struct PACK sf3_markup_link{
   struct sf3_markup markup;
   sf3_str16 address;
 };
 
-struct __attribute__((packed)) sf3_markup_target{
+struct PACK sf3_markup_target{
   struct sf3_markup markup;
   sf3_str16 address;
 };
 
-struct __attribute__((packed)) sf3_markup_font{
+struct PACK sf3_markup_font{
   struct sf3_markup markup;
   sf3_str16 font;
 };
 
-struct __attribute__((packed)) sf3_text{
+struct PACK sf3_text{
   struct sf3_identifier identifier;
   uint64_t markup_size;
   uint32_t markup_count;

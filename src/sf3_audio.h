@@ -16,7 +16,7 @@ enum sf3_audio_format{
   SF3_SAMPLE_FLOAT8 = 0x28
 };
 
-struct __attribute__((packed)) sf3_audio{
+struct PACK sf3_audio{
   struct sf3_identifier identifier;
   uint32_t samplerate;
   uint8_t channels;
