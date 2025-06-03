@@ -30,7 +30,7 @@ enum SF3_PIXEL_CHANNELS{
   SF3_PIXEL_KYMC = 0x54,
 };
 
-struct sf3_image{
+struct __attribute__((packed)) sf3_image{
   struct sf3_identifier identifier;
   uint32_t width;
   uint32_t height;

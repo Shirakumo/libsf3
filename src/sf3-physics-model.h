@@ -10,7 +10,7 @@ enum sf3_physics_shape_type{
   SF3_PHYSICS_SHAPE_MESH = 0x05,
 };
 
-struct sf3_shape_ellipsoid{
+struct __attribute__((packed)) sf3_shape_ellipsoid{
   float transform[16];
   uint8_t type;
   float w;
@@ -18,7 +18,7 @@ struct sf3_shape_ellipsoid{
   float d;
 };
 
-struct sf3_shape_box{
+struct __attribute__((packed)) sf3_shape_box{
   float transform[16];
   uint8_t type;
   float w;
@@ -26,7 +26,7 @@ struct sf3_shape_box{
   float d;
 };
 
-struct sf3_shape_cylinder{
+struct __attribute__((packed)) sf3_shape_cylinder{
   float transform[16];
   uint8_t type;
   float bottom_radius;
@@ -34,7 +34,7 @@ struct sf3_shape_cylinder{
   float height;
 };
 
-struct sf3_shape_pill{
+struct __attribute__((packed)) sf3_shape_pill{
   float transform[16];
   uint8_t type;
   float bottom_radius;
@@ -42,19 +42,19 @@ struct sf3_shape_pill{
   float height;
 };
 
-struct sf3_shape_mesh{
+struct __attribute__((packed)) sf3_shape_mesh{
   float transform[16];
   uint8_t type;
   uint16_t count;
   float vertices[];
 };
 
-struct sf3_physics_shape{
+struct __attribute__((packed)) sf3_physics_shape{
   float transform[16];
   uint8_t type;
 };
 
-struct sf3_physics_model{
+struct __attribute__((packed)) sf3_physics_model{
   struct sf3_identifier identifier;
   float mass;
   float tensor[9];

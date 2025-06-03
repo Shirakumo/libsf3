@@ -2,20 +2,20 @@
 
 #define SF3_FORMAT_ID_ARCHIVE 0x01
 
-struct sf3_archive{
+struct __attribute__((packed)) sf3_archive{
   struct sf3_identifier identifier;
   uint64_t count;
   uint64_t metadata_size;
   uint64_t entry_offset[];
 };
 
-struct sf3_archive_meta{
+struct __attribute__((packed)) sf3_archive_meta{
   int64_t modtime;
   sf3_crc32_checksum checksum;
   sf3_str8 mime_type;
 };
 
-struct sf3_file{
+struct __attribute__((packed)) sf3_file{
   uint64_t length;
   char data[];
 };

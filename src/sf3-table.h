@@ -1,6 +1,6 @@
 #include "sf3-core.h"
 
-#define SF3_FORMAT_ID_LOG 0x07
+#define SF3_FORMAT_ID_TABLE 0x07
 
 enum sf3_column_type{
   SF3_COLUMN_UINT8 = 0x01,
@@ -20,13 +20,13 @@ enum sf3_column_type{
   SF3_COLUMN_BOOLEAN = 0x61,
 };
 
-struct sf3_column_spec{
+struct __attribute__((packed)) sf3_column_spec{
   uint32_t length;
   uint8_t type;
   sf3_str16 name;
 };
 
-struct sf3_table{
+struct __attribute__((packed)) sf3_table{
   struct sf3_identifier identifier;
   uint16_t column_count;
   uint64_t row_length;

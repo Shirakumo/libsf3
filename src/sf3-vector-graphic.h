@@ -13,44 +13,44 @@ enum sf3_vector_instruction_type{
   SF3_INSTRUCTION_MATRIX = 0x12,
 };
 
-struct sf3_point{
+struct __attribute__((packed)) sf3_point{
   float x;
   float y;
 };
 
-struct sf3_size{
+struct __attribute__((packed)) sf3_size{
   float w;
   float h;
 };
 
-struct sf3_color{
+struct __attribute__((packed)) sf3_color{
   float r;
   float g;
   float b;
   float a;
 };
 
-struct sf3_shape_outline{
+struct __attribute__((packed)) sf3_shape_outline{
   uint16_t count;
   struct sf3_point edges[];
 };
 
 #define SF3_SKIP_OUTLINE(OUTLINE) ((OUTLINE).edges+(OUTLINE).count)
 
-struct sf3_shape_bounds{
+struct __attribute__((packed)) sf3_shape_bounds{
   float x;
   float y;
   float w;
   float h;
 };
 
-struct sf3_shape_fill{
+struct __attribute__((packed)) sf3_shape_fill{
   struct sf3_color fill_color;
   struct sf3_color outline_color;
   float outline_thickness;
 };
 
-struct sf3_text_instruction{
+struct __attribute__((packed)) sf3_text_instruction{
   uint8_t type;
   struct sf3_point point;
   struct sf3_color color;
@@ -58,51 +58,51 @@ struct sf3_text_instruction{
   sf3_str16 font;
 };
 
-struct sf3_curve_instruction{
+struct __attribute__((packed)) sf3_curve_instruction{
   uint8_t type;
   struct sf3_shape_fill fill;
   struct sf3_shape_outline outline;
 };
 
-struct sf3_polygon_instruction{
+struct __attribute__((packed)) sf3_polygon_instruction{
   uint8_t type;
   struct sf3_shape_fill fill;
   struct sf3_shape_outline outline;
 };
 
-struct sf3_circle_instruction{
+struct __attribute__((packed)) sf3_circle_instruction{
   uint8_t type;
   struct sf3_shape_fill fill;
   struct sf3_shape_bounds bounds;
 };
 
-struct sf3_rectangle_instruction{
+struct __attribute__((packed)) sf3_rectangle_instruction{
   uint8_t type;
   struct sf3_shape_fill fill;
   struct sf3_shape_bounds bounds;
 };
 
-struct sf3_line_instruction{
+struct __attribute__((packed)) sf3_line_instruction{
   uint8_t type;
   struct sf3_color color;
   float thickness;
   struct sf3_shape_outline outline;
 };
 
-struct sf3_matrix_instruction{
+struct __attribute__((packed)) sf3_matrix_instruction{
   uint8_t type;
   float elements[6];  
 };
 
-struct sf3_identity_instruction{
+struct __attribute__((packed)) sf3_identity_instruction{
   uint8_t type;
 };
 
-struct sf3_vector_instruction{
+struct __attribute__((packed)) sf3_vector_instruction{
   uint8_t type;
 };
 
-struct sf3_vector_graphic{
+struct __attribute__((packed)) sf3_vector_graphic{
   struct sf3_identifier identifier;
   uint32_t width;
   uint32_t height;
