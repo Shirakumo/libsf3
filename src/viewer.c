@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <time.h>
 #include <sys/mman.h>
 #include <sys/stat.h>
 #include "sf3.h"
@@ -38,14 +39,44 @@ int map_file(char *file, void **addr, size_t *size){
 }
 
 int view_archive(struct sf3_archive *archive){
+  printf("%lu files:\n",
+         archive->count);
+  for(uint64_t i=0; i<archive->count; ++i){
+    const struct sf3_archive_meta *meta = sf3_archive_meta_entry(archive, i);
+    printf("%4d %s\n     Modtime: %s     Mime: %s\n     CRC32: %08x\n     Size: %d\n",
+           i,
+           sf3_archive_meta_path(meta),
+           ctime(&meta->modtime),
+           sf3_archive_meta_mime_type(meta),
+           meta->checksum,
+           sf3_archive_file(archive, i)->length);
+  }
   return 1;
 }
 
 int view_audio(struct sf3_audio *audio){
+  printf("%d frames, %d Hz, %d channels, %s encoding\n",
+         audio->frame_count,
+         audio->samplerate,
+         audio->channels,
+         sf3_audio_format(audio->format));
+  printf("%fs of audio data at %d bytes/frame\n",
+         sf3_audio_duration(audio),
+         sf3_audio_frame_size(audio));
   return 1;
 }
 
 int view_image(struct sf3_image *image){
+  printf("%u x %u x %u, %d channels (%s), %s encoding\n",
+         image->width,
+         image->height,
+         image->depth,
+         sf3_image_channel_count(image),
+         sf3_image_channel_layout(image->channels),
+         sf3_image_pixel_format(image->format));
+  printf("%lu pixels, %d bytes/pixel\n",
+         image->width*image->height*image->depth,
+         sf3_image_pixel_stride(image));
   return 1;
 }
 
