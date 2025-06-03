@@ -340,6 +340,130 @@ int view_text(struct sf3_text *text){
 }
 
 int view_vector_graphic(struct sf3_vector_graphic *vector_graphic){
+  printf("%d x %d, %d instructions\n",
+         vector_graphic->width,
+         vector_graphic->height,
+         vector_graphic->count);
+  printf("Instructions:\n");
+  const struct sf3_vector_instruction *instruction = &vector_graphic->instructions[0];
+  for(uint32_t i=0; i<vector_graphic->count; ++i){
+    printf(" %4d %s\n",
+           i,
+           sf3_vector_instruction_type(instruction->type));
+    switch(instruction->type){
+    case SF3_INSTRUCTION_RECTANGLE: {
+      const struct sf3_rectangle_instruction *inst = (struct sf3_rectangle_instruction*)instruction;
+      printf("      Point: %6.2f %6.2f\n      Size:  %6.2f %6.2f\n",
+             inst->bounds.x,
+             inst->bounds.y,
+             inst->bounds.w,
+             inst->bounds.h);
+      printf("      Fill:  %.3f %.3f %.3f %.3f\n      Line:  %.3f %.3f %.3f %.3f\n      Thickness: %.2f\n",
+             inst->fill.fill_color.r,
+             inst->fill.fill_color.g,
+             inst->fill.fill_color.b,
+             inst->fill.fill_color.a,
+             inst->fill.outline_color.r,
+             inst->fill.outline_color.g,
+             inst->fill.outline_color.b,
+             inst->fill.outline_color.a,
+             inst->fill.outline_thickness);
+      break;}
+    case SF3_INSTRUCTION_CIRCLE: {
+      const struct sf3_circle_instruction *inst = (struct sf3_circle_instruction*)instruction;
+      printf("      Point: %6.2f %6.2f\n      Size:  %6.2f %6.2f\n",
+             inst->bounds.x,
+             inst->bounds.y,
+             inst->bounds.w,
+             inst->bounds.h);
+      printf("      Fill:  %.3f %.3f %.3f %.3f\n      Line:  %.3f %.3f %.3f %.3f\n      Thickness: %.2f\n",
+             inst->fill.fill_color.r,
+             inst->fill.fill_color.g,
+             inst->fill.fill_color.b,
+             inst->fill.fill_color.a,
+             inst->fill.outline_color.r,
+             inst->fill.outline_color.g,
+             inst->fill.outline_color.b,
+             inst->fill.outline_color.a,
+             inst->fill.outline_thickness);
+      break;}
+    case SF3_INSTRUCTION_LINE: {
+      const struct sf3_line_instruction *inst = (struct sf3_line_instruction*)instruction;
+      printf("      Color: %.3f %.3f %.3f %.3f\n      Thickness: %.2f\n",
+             inst->color.r,
+             inst->color.g,
+             inst->color.b,
+             inst->color.a,
+             inst->thickness);
+      printf("      Edges:\n");
+      for(uint16_t i=0; i<inst->outline.count; ++i){
+        struct sf3_point *p = &inst->outline.edges[i];
+        printf("        %6.2f %6.2f\n", p->x, p->y);
+      }
+      break;}
+    case SF3_INSTRUCTION_POLYGON: {
+      const struct sf3_polygon_instruction *inst = (struct sf3_polygon_instruction*)instruction;
+      printf("      Fill:  %.3f %.3f %.3f %.3f\n      Line:  %.3f %.3f %.3f %.3f\n      Thickness: %.2f\n",
+             inst->fill.fill_color.r,
+             inst->fill.fill_color.g,
+             inst->fill.fill_color.b,
+             inst->fill.fill_color.a,
+             inst->fill.outline_color.r,
+             inst->fill.outline_color.g,
+             inst->fill.outline_color.b,
+             inst->fill.outline_color.a,
+             inst->fill.outline_thickness);
+      printf("      Edges:\n");
+      for(uint16_t i=0; i<inst->outline.count; ++i){
+        struct sf3_point *p = &inst->outline.edges[i];
+        printf("        %6.2f %6.2f\n", p->x, p->y);
+      }
+      break;}
+    case SF3_INSTRUCTION_CURVE: {
+      const struct sf3_curve_instruction *inst = (struct sf3_curve_instruction*)instruction;
+      printf("      Fill:  %.3f %.3f %.3f %.3f\n      Line:  %.3f %.3f %.3f %.3f\n      Thickness: %.2f\n",
+             inst->fill.fill_color.r,
+             inst->fill.fill_color.g,
+             inst->fill.fill_color.b,
+             inst->fill.fill_color.a,
+             inst->fill.outline_color.r,
+             inst->fill.outline_color.g,
+             inst->fill.outline_color.b,
+             inst->fill.outline_color.a,
+             inst->fill.outline_thickness);
+      printf("      Edges:\n");
+      for(uint16_t i=0; i<inst->outline.count; i+=3){
+        struct sf3_point *p = &inst->outline.edges[i];
+        printf("        %6.2f %6.2f  %6.2f %6.2f  %6.2f %6.2f  %6.2f %6.2f\n",
+               p[0].x, p[0].y, p[1].x, p[1].y, p[2].x, p[2].y, p[3].x, p[3].y);
+      }
+      break;}
+    case SF3_INSTRUCTION_TEXT: {
+      const struct sf3_text_instruction *inst = (struct sf3_text_instruction*)instruction;
+      printf("      Point: %6.2f %6.2f\n",
+             inst->point.x,
+             inst->point.y);
+      printf("      Color: %.3f %.3f %.3f %.3f\n",
+             inst->color.r,
+             inst->color.g,
+             inst->color.b,
+             inst->color.a);
+      printf("      Font:  %s\n      Size:  %.2f\n      Text:  %s\n",
+             inst->font.str,
+             inst->font_size,
+             sf3_text_instruction_string(inst));
+      break;}
+    case SF3_INSTRUCTION_IDENTITY: {
+      break;}
+    case SF3_INSTRUCTION_MATRIX: {
+      for(uint8_t j=0; j<6; ++j){
+        if(j%3 == 0) printf("\n        ");
+        printf("%f ", ((struct sf3_matrix_instruction*)instruction)->elements[j]);
+      }
+      break;}
+    }
+    instruction = sf3_vector_graphic_next_instruction(instruction);
+  }
   return 1;
 }
 

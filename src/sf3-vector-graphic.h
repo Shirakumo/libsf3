@@ -111,11 +111,12 @@ struct __attribute__((packed)) sf3_vector_graphic{
 };
 
 const struct sf3_vector_instruction *sf3_vector_graphic_next_instruction(const struct sf3_vector_instruction *instruction){
+  const char *base = (char*)instruction;
   switch(instruction->type){
   case SF3_INSTRUCTION_RECTANGLE:
-    return (struct sf3_vector_instruction *)((struct sf3_rectangle_instruction *)instruction)+1;
+    return (struct sf3_vector_instruction *)(base+sizeof(struct sf3_rectangle_instruction));
   case SF3_INSTRUCTION_CIRCLE:
-    return (struct sf3_vector_instruction *)((struct sf3_circle_instruction *)instruction)+1;
+    return (struct sf3_vector_instruction *)(base+sizeof(struct sf3_circle_instruction));
   case SF3_INSTRUCTION_LINE:
     return (struct sf3_vector_instruction *)SF3_SKIP_OUTLINE(((struct sf3_line_instruction *)instruction)->outline);
   case SF3_INSTRUCTION_POLYGON:
@@ -127,9 +128,9 @@ const struct sf3_vector_instruction *sf3_vector_graphic_next_instruction(const s
     return (struct sf3_vector_instruction *)(SF3_SKIP_STRP((sf3_str16 *)SF3_SKIP_STR(i->font)));
   }
   case SF3_INSTRUCTION_IDENTITY:
-    return (struct sf3_vector_instruction *)((struct sf3_identity_instruction *)instruction)+1;
+    return (struct sf3_vector_instruction *)(base+sizeof(struct sf3_identity_instruction));
   case SF3_INSTRUCTION_MATRIX:
-    return (struct sf3_vector_instruction *)((struct sf3_matrix_instruction *)instruction)+1;
+    return (struct sf3_vector_instruction *)(base+sizeof(struct sf3_matrix_instruction));
   default:
     return 0;
   }
@@ -138,4 +139,18 @@ const struct sf3_vector_instruction *sf3_vector_graphic_next_instruction(const s
 const char *sf3_text_instruction_string(const struct sf3_text_instruction *instruction){
   const sf3_str16 *string = (sf3_str16*)SF3_SKIP_STR(instruction->font);
   return string->str;
+}
+
+const char *sf3_vector_instruction_type(enum sf3_vector_instruction_type type){
+  switch(type){
+  case SF3_INSTRUCTION_LINE: return "line";
+  case SF3_INSTRUCTION_RECTANGLE: return "rectangle";
+  case SF3_INSTRUCTION_CIRCLE: return "circle";
+  case SF3_INSTRUCTION_POLYGON: return "polygon";
+  case SF3_INSTRUCTION_CURVE: return "curve";
+  case SF3_INSTRUCTION_TEXT: return "text";
+  case SF3_INSTRUCTION_IDENTITY: return "identity";
+  case SF3_INSTRUCTION_MATRIX: return "matrix";
+  default: return "Unknown";
+  }
 }
