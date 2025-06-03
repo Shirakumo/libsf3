@@ -2,7 +2,7 @@
 
 #define SF3_FORMAT_ID_IMAGE 0x03
 
-enum SF3_PIXEL_FORMAT{
+enum sf3_pixel_format{
   SF3_PIXEL_INT8 = 0x01,
   SF3_PIXEL_INT16 = 0x02,
   SF3_PIXEL_INT32 = 0x04,
@@ -16,7 +16,7 @@ enum SF3_PIXEL_FORMAT{
   SF3_PIXEL_FLOAT8 = 0x28
 };
 
-enum SF3_PIXEL_CHANNELS{
+enum sf3_channel_layout{
   SF3_PIXEL_V = 0x01,
   SF3_PIXEL_VA = 0x02,
   SF3_PIXEL_RGB = 0x03,
@@ -50,4 +50,38 @@ int sf3_image_channel_count(const struct sf3_image *image){
 
 int sf3_image_pixel_stride(const struct sf3_image *image){
   return (image->channels & 0x0F) * (image->format & 0x0F);
+}
+
+char *sf3_image_pixel_format(enum sf3_pixel_format format){
+  switch(format){
+  case SF3_PIXEL_INT8: return "INT8";
+  case SF3_PIXEL_INT16: return "INT16";
+  case SF3_PIXEL_INT32: return "INT32";
+  case SF3_PIXEL_INT64: return "INT64";
+  case SF3_PIXEL_UINT8: return "UINT8";
+  case SF3_PIXEL_UINT16: return "UINT16";
+  case SF3_PIXEL_UINT32: return "UINT32";
+  case SF3_PIXEL_UINT64: return "UINT64";
+  case SF3_PIXEL_FLOAT2: return "FLOAT2";
+  case SF3_PIXEL_FLOAT4: return "FLOAT4";
+  case SF3_PIXEL_FLOAT8: return "FLOAT8";
+  default: "Unknown";
+  }
+}
+
+char *sf3_image_channel_layout(enum sf3_channel_layout format){
+  switch(format){
+  case SF3_PIXEL_V: return "V";
+  case SF3_PIXEL_VA: return "VA";
+  case SF3_PIXEL_RGB: return "RGB";
+  case SF3_PIXEL_RGBA: return "RGBA";
+  case SF3_PIXEL_AV: return "AV";
+  case SF3_PIXEL_BGR: return "BGR";
+  case SF3_PIXEL_ABGR: return "ABGR";
+  case SF3_PIXEL_ARGB: return "ARGB";
+  case SF3_PIXEL_BGRA: return "BGRA";
+  case SF3_PIXEL_CMYK: return "CMYK";
+  case SF3_PIXEL_KYMC: return "KYMC";
+  default: return "Unknown";
+  }
 }
