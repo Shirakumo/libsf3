@@ -110,6 +110,38 @@ int view_log(struct sf3_log *log){
 }
 
 int view_model(struct sf3_model *model){
+  printf("%d textures, %u faces, %u vertices\n",
+         sf3_model_texture_count(model),
+         sf3_model_faces(model)->count,
+         sf3_model_vertex_count(model));
+  printf("Vertex attributes:");
+  if(model->vertex_format & SF3_VERTEX_POSITION) printf(" position");
+  if(model->vertex_format & SF3_VERTEX_UV) printf(" uv");
+  if(model->vertex_format & SF3_VERTEX_COLOR) printf(" color");
+  if(model->vertex_format & SF3_VERTEX_NORMAL) printf(" normal");
+  if(model->vertex_format & SF3_VERTEX_TANGENT) printf(" tangent");
+  printf("\nTextures:\n");
+  sf3_str16 *texture = &model->textures[0];
+  for(uint8_t i=0; i<sf3_model_texture_count(model); ++i){
+    printf("%16s %s\n",
+           sf3_model_material_type(sf3_model_texture_material(model, i)),
+           texture->str);
+    texture = sf3_model_next_texture(texture);
+  }
+  printf("Vertices:\n");
+  const float *vertices = sf3_model_vertices(model)->vertices;
+  for(uint32_t i=0; i<sf3_model_vertex_count(model); ++i){
+    for(uint32_t a=1; a<255; a = a << 1){
+      if(a & model->vertex_format){
+        for(uint8_t f=0; f<sf3_model_vertex_attribute_count(a); ++f){
+          printf("%f ", vertices[f]);
+          ++vertices;
+        }
+        printf(" ");
+      }
+    }
+    printf("\n");
+  }
   return 1;
 }
 

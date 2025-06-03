@@ -52,7 +52,7 @@ const struct sf3_vertices *sf3_model_vertices(const struct sf3_model *model){
   return (const struct sf3_vertices *)(faces->faces+faces->count);
 }
 
-uint8_t sf3_model_material_count(const struct sf3_model *model){
+uint8_t sf3_model_texture_count(const struct sf3_model *model){
   uint8_t type = model->material_type;
   return
     (type >> 0) & 1 +
@@ -73,4 +73,46 @@ uint8_t sf3_model_vertex_stride(const struct sf3_model *model){
     ((type >> 2) & 1) * 3 +
     ((type >> 3) & 1) * 3 +
     ((type >> 4) & 1) * 3;
+}
+
+uint8_t sf3_model_vertex_attribute_count(enum sf3_vertex_format format){
+  switch(format){
+  case SF3_VERTEX_POSITION: return 3;
+  case SF3_VERTEX_UV: return 2;
+  case SF3_VERTEX_COLOR: return 3;
+  case SF3_VERTEX_NORMAL: return 3;
+  case SF3_VERTEX_TANGENT: return 3;
+  default: return 0;
+  }
+}
+
+uint32_t sf3_model_vertex_count(const struct sf3_model *model){
+  return sf3_model_vertices(model)->count / sf3_model_vertex_stride(model);
+}
+
+enum sf3_material_type sf3_model_texture_material(const struct sf3_model *model, uint8_t index){
+  uint8_t type = model->material_type;
+  for(uint8_t i=0; i<8; ++i){
+    uint8_t bit = (1 << i);
+    if(index == 0)
+      return bit;
+    if(type & bit){
+      index--;
+    }
+  }
+  return 0xFF;
+}
+
+const char *sf3_model_material_type(enum sf3_material_type type){
+  switch(type){
+  case SF3_MATERIAL_ALBEDO: return "albedo";
+  case SF3_MATERIAL_NORMAL: return "normal";
+  case SF3_MATERIAL_METALLIC: return "metallic";
+  case SF3_MATERIAL_METALNESS: return "metalness";
+  case SF3_MATERIAL_ROUGHNESS: return "roughness";
+  case SF3_MATERIAL_OCCLUSION: return "occlusion";
+  case SF3_MATERIAL_SPECULAR: return "specular";
+  case SF3_MATERIAL_EMISSION: return "emission";
+  default: return "Unknown";
+  }
 }
