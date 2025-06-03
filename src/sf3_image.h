@@ -1,4 +1,4 @@
-#include "sf3-core.h"
+#include "sf3_core.h"
 
 #define SF3_FORMAT_ID_IMAGE 0x03
 

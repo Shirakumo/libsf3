@@ -1,12 +1,12 @@
-#include "sf3-archive.h"
-#include "sf3-audio.h"
-#include "sf3-image.h"
-#include "sf3-log.h"
-#include "sf3-model.h"
-#include "sf3-physics-model.h"
-#include "sf3-table.h"
-#include "sf3-text.h"
-#include "sf3-vector-graphic.h"
+#include "sf3_archive.h"
+#include "sf3_audio.h"
+#include "sf3_image.h"
+#include "sf3_log.h"
+#include "sf3_model.h"
+#include "sf3_physics_model.h"
+#include "sf3_table.h"
+#include "sf3_text.h"
+#include "sf3_vector_graphic.h"
 
 char *sf3_kind(int type){
   switch(type){

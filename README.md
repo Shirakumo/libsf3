@@ -4,7 +4,7 @@ libsf3 is a header-only C99 implementation of the [SF3 (Simple File Format Famil
 This project also comes with a sample application, `sf3_viewer`, which should illustrate the usage patterns of the library, and can be used to print the contents of an SF3 file for easier viewing.
 
 ## How To
-First you will want to include the source of the relevant header for your use. You can either include all of SF3 via `sf3.h`, or only include the header of the formats you are interested in vie `sf3-image.h` etc.
+First you will want to include the source of the relevant header for your use. You can either include all of SF3 via `sf3.h`, or only include the header of the formats you are interested in vie `sf3_image.h` etc.
 
 In general the expectation of this library is that you will have the entire SF3 file in memory somehow, whether that be via `mmap` or by manually reading it in.
 
