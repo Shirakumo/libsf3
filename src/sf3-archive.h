@@ -22,7 +22,7 @@ struct __attribute__((packed)) sf3_archive{
 
 const struct sf3_archive_meta *sf3_archive_meta_entry(const struct sf3_archive *archive, uint64_t index){
   if(archive->count <= index) return 0;
-  const uint8_t *base = (uint8_t *)&archive->entry_offset[0];
+  const char *base = (char *)&archive->entry_offset[archive->count];
   base += archive->entry_offset[index];
   return (const struct sf3_archive_meta *)base;
 }
@@ -37,8 +37,9 @@ const char *sf3_archive_meta_path(const struct sf3_archive_meta *meta){
 
 const struct sf3_file *sf3_archive_file(const struct sf3_archive *archive, uint64_t index){
   if(archive->count <= index) return 0;
-  const uint8_t *base = (uint8_t *)&archive->entry_offset[0];
+  const char *base = (char *)&archive->entry_offset[0];
   base += archive->metadata_size;
   const uint64_t *offsets = (const uint64_t *)base;
+  base = (char*)(offsets+archive->count);
   return (const struct sf3_file *)(base + offsets[index]);
 }
