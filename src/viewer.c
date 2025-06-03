@@ -154,6 +154,40 @@ int view_table(struct sf3_table *table){
 }
 
 int view_text(struct sf3_text *text){
+  printf("Markup:\n");
+  const struct sf3_markup *markup = &text->markup[0];
+  for(uint32_t i=0; i<text->markup_count; ++i){
+    printf("%6lu %6lu %s",
+           markup->start,
+           markup->end,
+           sf3_text_markup_option_type(markup->option_type));
+    switch(markup->option_type){
+    case SF3_MARKUP_COLOR:
+      printf(" %f %f %f",
+             ((struct sf3_markup_color*)markup)->r,
+             ((struct sf3_markup_color*)markup)->g,
+             ((struct sf3_markup_color*)markup)->b);
+      break;
+    case SF3_MARKUP_SIZE:
+      printf(" %f", ((struct sf3_markup_size*)markup)->size);
+      break;
+    case SF3_MARKUP_HEADING:
+      printf(" %d", ((struct sf3_markup_heading*)markup)->level);
+      break;
+    case SF3_MARKUP_LINK:
+      printf(" %s", ((struct sf3_markup_link*)markup)->address.str);
+      break;
+    case SF3_MARKUP_TARGET:
+      printf(" %s", ((struct sf3_markup_target*)markup)->address.str);
+      break;
+    case SF3_MARKUP_FONT:
+      printf(" %s", ((struct sf3_markup_font*)markup)->font.str);
+      break;
+    }
+    printf("\n");
+    markup = sf3_text_next_markup(markup);
+  }
+  printf("Text:\n%s\n", sf3_text_string(text));
   return 1;
 }
 
