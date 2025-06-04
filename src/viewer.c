@@ -132,7 +132,7 @@ int view_model(struct sf3_model *model){
     for(uint32_t a=1; a<255; a = a << 1){
       if(a & model->vertex_format){
         for(uint8_t f=0; f<sf3_model_vertex_attribute_count(a); ++f){
-          printf("%f ", vertices[f]);
+          printf("%f ", vertices[0]);
           ++vertices;
         }
         printf(" ");
