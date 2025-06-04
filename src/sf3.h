@@ -8,6 +8,7 @@
 #include "sf3_text.h"
 #include "sf3_vector_graphic.h"
 
+/// Returns a human-readable string description of the SF3 format_id.
 char *sf3_kind(int type){
   switch(type){
   case SF3_FORMAT_ID_ARCHIVE:
@@ -33,6 +34,7 @@ char *sf3_kind(int type){
   }
 }
 
+/// Returns the standard file type suffix for the given SF3 format_id.
 char *sf3_file_type(int type){
   switch(type){
   case SF3_FORMAT_ID_ARCHIVE:
@@ -57,6 +59,8 @@ char *sf3_file_type(int type){
     return "sf3";
   }
 }
+
+/// Returns the standard media mime-type for the given SF3 format_id.
 char *sf3_mime_type(int type){
   switch(type){
   case SF3_FORMAT_ID_ARCHIVE:
