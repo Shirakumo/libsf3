@@ -1,3 +1,5 @@
+#ifndef __SF3__
+#define __SF3__
 #include "sf3_archive.h"
 #include "sf3_audio.h"
 #include "sf3_image.h"
@@ -85,3 +87,4 @@ char *sf3_mime_type(int type){
     return "application/x.sf3";
   }
 }
+#endif

@@ -1,3 +1,5 @@
+#ifndef __SF3_ARCHIVE__
+#define __SF3_ARCHIVE__
 #include "sf3_core.h"
 
 /// The format_id for an archive file
@@ -73,3 +75,4 @@ const struct sf3_file *sf3_archive_file(const struct sf3_archive *archive, uint6
   base = (char*)(offsets+archive->count);
   return (const struct sf3_file *)(base + offsets[index]);
 }
+#endif

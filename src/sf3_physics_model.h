@@ -1,3 +1,5 @@
+#ifndef __SF3_PHYSICS_MODEL__
+#define __SF3_PHYSICS_MODEL__
 #include "sf3_core.h"
 
 /// The format_id for a physics model file.
@@ -142,3 +144,4 @@ const char *sf3_physics_shape_type(enum sf3_physics_shape_type type){
   default: return "Unknown";
   }
 }
+#endif

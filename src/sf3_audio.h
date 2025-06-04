@@ -1,3 +1,5 @@
+#ifndef __SF3_AUDIO__
+#define __SF3_AUDIO__
 #include "sf3_core.h"
 
 /// The format_id for an audio file.
@@ -81,3 +83,4 @@ char *sf3_audio_format(enum sf3_audio_format format){
   default: return "Unknown";
   }
 }
+#endif

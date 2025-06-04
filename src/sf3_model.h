@@ -1,3 +1,5 @@
+#ifndef __SF3_MODEL__
+#define __SF3_MODEL__
 #include "sf3_core.h"
 
 /// The format_id for a model file.
@@ -163,3 +165,4 @@ const char *sf3_model_material_type(enum sf3_material_type type){
   default: return "Unknown";
   }
 }
+#endif

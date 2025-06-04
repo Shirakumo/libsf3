@@ -1,3 +1,5 @@
+#ifndef __SF3_LOG__
+#define __SF3_LOG__
 #include "sf3_core.h"
 
 /// The format_id for a log file.
@@ -96,3 +98,4 @@ uint32_t sf3_log_chunk_capacity(const struct sf3_log_chunk *chunk){
 uint32_t sf3_log_chunk_remaining(const struct sf3_log_chunk *chunk){
   return sf3_log_chunk_capacity(chunk) - chunk->entry_count;
 }
+#endif

@@ -1,3 +1,5 @@
+#ifndef __SF3_TABLE__
+#define __SF3_TABLE__
 #include "sf3_core.h"
 
 /// The format_id for a table file.
@@ -157,3 +159,4 @@ const char* sf3_table_column_type(enum sf3_column_type type){
   default: return "Unknown";
   }
 }
+#endif

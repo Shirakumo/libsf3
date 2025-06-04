@@ -1,3 +1,5 @@
+#ifndef __SF3_VECTOR_GRAPHIC__
+#define __SF3_VECTOR_GRAPHIC__
 #include "sf3_core.h"
 
 /// The format_id for a vector graphic file.
@@ -238,3 +240,4 @@ const char *sf3_vector_instruction_type(enum sf3_vector_instruction_type type){
   default: return "Unknown";
   }
 }
+#endif

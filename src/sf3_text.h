@@ -1,3 +1,5 @@
+#ifndef __SF3_TEXT__
+#define __SF3_TEXT__
 #include "sf3_core.h"
 
 /// The format_id for a text file.
@@ -158,3 +160,4 @@ const char *sf3_text_markup_option_type(enum sf3_markup_option_type type){
   default: return "Unknown";
   }
 }
+#endif

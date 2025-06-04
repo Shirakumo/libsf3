@@ -1,3 +1,5 @@
+#ifndef __SF3_IMAGE__
+#define __SF3_IMAGE__
 #include "sf3_core.h"
 
 /// The format_id for an image file.
@@ -133,3 +135,4 @@ char *sf3_image_channel_layout(enum sf3_channel_layout format){
   default: return "Unknown";
   }
 }
+#endif
