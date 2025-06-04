@@ -432,7 +432,7 @@ int view_vector_graphic(struct sf3_vector_graphic *vector_graphic){
              inst->fill.outline_color.a,
              inst->fill.outline_thickness);
       printf("      Edges:\n");
-      for(uint16_t i=0; i<inst->outline.count; i+=3){
+      for(uint16_t i=0; i<inst->outline.count-1; i+=3){
         struct sf3_point *p = &inst->outline.edges[i];
         printf("        %6.2f %6.2f  %6.2f %6.2f  %6.2f %6.2f  %6.2f %6.2f\n",
                p[0].x, p[0].y, p[1].x, p[1].y, p[2].x, p[2].y, p[3].x, p[3].y);
