@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 #include <fcntl.h>
 #include <unistd.h>
 #include <time.h>
@@ -8,34 +9,31 @@
 
 int map_file(char *file, void **addr, size_t *size){
   struct stat stat;
-  int fd = -1;
-  
-  printf("%s:\n", file);
-  fd = open(file, O_RDONLY);
+  int fd = open(file, O_RDONLY);
   
   if(fd == -1){
-    printf("ERROR: Failed to open file.\n");
+    printf("Failed to open file.\n");
     goto cleanup;
   }
   
   if(fstat(fd, &stat) == -1){
-    printf("ERROR: Failed to retrieve file size.\n");
+    printf("Failed to retrieve file size.\n");
     goto cleanup;
   }
 
   *size = stat.st_size;
   *addr = mmap(NULL, *size, PROT_READ, MAP_PRIVATE, fd, 0);
   if(!*addr){
-    printf("ERROR: Failed to mmap file.\n");
+    printf("Failed to mmap file.\n");
     goto cleanup;
   }
 
-  return 1;
+  return fd;
   
  cleanup:
   if(*addr) munmap(*addr, *size);
   if(0 <= fd) close(fd);
-  return 0;
+  return -1;
 }
 
 int view_archive(struct sf3_archive *archive){
@@ -398,7 +396,7 @@ int view_vector_graphic(struct sf3_vector_graphic *vector_graphic){
              inst->thickness);
       printf("      Edges:\n");
       for(uint16_t i=0; i<inst->outline.count; ++i){
-        struct sf3_point *p = &inst->outline.edges[i];
+        const struct sf3_point *p = &inst->outline.edges[i];
         printf("        %6.2f %6.2f\n", p->x, p->y);
       }
       break;}
@@ -416,7 +414,7 @@ int view_vector_graphic(struct sf3_vector_graphic *vector_graphic){
              inst->fill.outline_thickness);
       printf("      Edges:\n");
       for(uint16_t i=0; i<inst->outline.count; ++i){
-        struct sf3_point *p = &inst->outline.edges[i];
+        const struct sf3_point *p = &inst->outline.edges[i];
         printf("        %6.2f %6.2f\n", p->x, p->y);
       }
       break;}
@@ -434,7 +432,7 @@ int view_vector_graphic(struct sf3_vector_graphic *vector_graphic){
              inst->fill.outline_thickness);
       printf("      Edges:\n");
       for(uint16_t i=0; i<inst->outline.count-1; i+=3){
-        struct sf3_point *p = &inst->outline.edges[i];
+        const struct sf3_point *p = &inst->outline.edges[i];
         printf("        %6.2f %6.2f  %6.2f %6.2f  %6.2f %6.2f  %6.2f %6.2f\n",
                p[0].x, p[0].y, p[1].x, p[1].y, p[2].x, p[2].y, p[3].x, p[3].y);
       }
@@ -468,14 +466,7 @@ int view_vector_graphic(struct sf3_vector_graphic *vector_graphic){
   return 1;
 }
 
-int view_file(void *addr, size_t size){
-  int type = sf3_check(addr, size);
-  if(!type){
-    printf("ERROR: Not a valid SF3 file.\n");
-    return 0;
-  }
-  printf("%s file (%s, %lu bytes)\n", sf3_kind(type), sf3_mime_type(type), size);
-  
+int view_file(void *addr, uint8_t type){
   switch(type){
   case SF3_FORMAT_ID_ARCHIVE:
     return view_archive((struct sf3_archive *)addr);
@@ -503,15 +494,58 @@ int view_file(void *addr, size_t size){
 
 int main(int argc, char *argv[]){
   if(argc<2){
-    fprintf(stderr, "Usage: ./sf3-viewer FILE...\n");
-    return 1;
+    fprintf(stderr, "Usage: %s [OPTION...] [FILE...]\n", argv[0]);
+    fprintf(stderr, "Print information about SF3 files.\n");
+    fprintf(stderr, "\n");
+    fprintf(stderr, "  -b, --brief                do not prepend filenames to output lines\n");
+    fprintf(stderr, "  -i, --mime                 output MIME type strings\n");
+    fprintf(stderr, "      --extension            output a slash-separated list of extensions\n");
+    fprintf(stderr, "\n");
+    fprintf(stderr, "Report bugs to https://shirakumo.org/projects/libsf3/\n");
+    return 0;
   }
-  for(int i=1; i<argc; ++i){
+  char mime=0, ext=0, brief=0;
+  ++argv; --argc;
+  while(1){
+    if(argv[0][0] != '-')break;
+    if(strcmp(argv[0], "-b") == 0 || strcmp(argv[0], "--brief") == 0){
+      brief=1;
+      ++argv; --argc;
+    }else if(strcmp(argv[0], "-i") == 0 || strcmp(argv[0], "--mime") == 0){
+      mime=1;
+      ++argv; --argc;
+    }else if(strcmp(argv[0], "--extension") == 0){
+      ext=1;
+      ++argv; --argc;
+    }else{
+      fprintf(stderr, "Unknown option: %s\n", argv[0]);
+      return 1;
+    }
+  }
+  for(int i=0; i<argc; ++i){
     void *addr;
     size_t size;
-    if(map_file(argv[i], &addr, &size)){
-      view_file(addr, size);
+    if(!brief) printf("%s: ", argv[i]);
+    int fd = map_file(argv[i], &addr, &size);
+    if(0 <= fd){
+      int type = sf3_check(addr, size);
+      if(!type){
+        printf("Not a valid SF3 file\n");
+        return 0;
+      }
+      if(!mime && !ext){
+        printf("%s file (%s, %lu bytes)\n", sf3_kind(type), sf3_mime_type(type), size);
+        view_file(addr, type);
+      }
+      if(mime){
+        printf("%s", sf3_mime_type(type));
+      }
+      if(ext){
+        if(mime)printf(" ");
+        printf("%s/%s", sf3_file_type(type), sf3_file_type(0));
+      }
       munmap(addr, size);
+      close(fd);
     }
     printf("\n");
   }
