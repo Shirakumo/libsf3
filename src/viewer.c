@@ -159,25 +159,25 @@ int view_physics_model(struct sf3_physics_model *physics_model){
     printf(" %4d %s\n", i, sf3_physics_shape_type(shape->type));
     switch(shape->type){
     case SF3_PHYSICS_SHAPE_ELLIPSOID:
-      printf("  w: %f h: %f d: %f\n",
+      printf("      w: %.3f h: %.3f d: %.3f\n",
              ((struct sf3_shape_ellipsoid *)shape)->w,
              ((struct sf3_shape_ellipsoid *)shape)->h,
              ((struct sf3_shape_ellipsoid *)shape)->d);
       break;
     case SF3_PHYSICS_SHAPE_BOX:
-      printf("  w: %f h: %f d: %f\n",
+      printf("      w: %.3f h: %.3f d: %f\n",
              ((struct sf3_shape_box *)shape)->w,
              ((struct sf3_shape_box *)shape)->h,
              ((struct sf3_shape_box *)shape)->d);
       break;
     case SF3_PHYSICS_SHAPE_CYLINDER:
-      printf("  br: %f tr: %f h: %f\n",
+      printf("      br: %.3f tr: %.3f h: %f\n",
              ((struct sf3_shape_cylinder *)shape)->bottom_radius,
              ((struct sf3_shape_cylinder *)shape)->top_radius,
              ((struct sf3_shape_cylinder *)shape)->height);
       break;
     case SF3_PHYSICS_SHAPE_PILL:
-      printf("  br: %f tr: %f h: %f\n",
+      printf("      br: %.3f tr: %.3f h: %f\n",
              ((struct sf3_shape_pill *)shape)->bottom_radius,
              ((struct sf3_shape_pill *)shape)->top_radius,
              ((struct sf3_shape_pill *)shape)->height);
@@ -185,7 +185,7 @@ int view_physics_model(struct sf3_physics_model *physics_model){
     case SF3_PHYSICS_SHAPE_MESH: {
       struct sf3_shape_mesh *mesh = (struct sf3_shape_mesh *)shape;
       for(uint16_t v=0; v<mesh->count; ++v){
-        printf("  %f %f %f\n",
+        printf("      %.3f %.3f %.3f\n",
                mesh->vertices[v*3+0],
                mesh->vertices[v*3+1],
                mesh->vertices[v*3+2]);
