@@ -125,7 +125,7 @@ const struct sf3_physics_shape *sf3_physics_model_next_shape(const struct sf3_ph
     return (const struct sf3_physics_shape *)(base+sizeof(struct sf3_shape_pill));
   case SF3_PHYSICS_SHAPE_MESH:{
     const struct sf3_shape_mesh *mesh = (const struct sf3_shape_mesh *)shape;
-    return (const struct sf3_physics_shape *)(mesh->vertices+mesh->count);
+    return (const struct sf3_physics_shape *)(mesh->vertices+(mesh->count*3));
   }
   default: return 0;
   }
