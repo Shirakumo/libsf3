@@ -5,22 +5,22 @@
 
 /// The column value types that can be stored.
 enum sf3_column_type{
-  /// The column elements are stored in 8-bit signed format.
-  SF3_COLUMN_INT8 = 0x01,
-  /// The column elements are stored in 16-bit signed format.
-  SF3_COLUMN_INT16 = 0x02,
-  /// The column elements are stored in 32-bit signed format.
-  SF3_COLUMN_INT32 = 0x04,
-  /// The column elements are stored in 64-bit signed format.
-  SF3_COLUMN_INT64 = 0x08,
   /// The column elements are stored in 8-bit unsigned format.
-  SF3_COLUMN_UINT8 = 0x11,
+  SF3_COLUMN_UINT8 = 0x01,
   /// The column elements are stored in 16-bit unsigned format.
-  SF3_COLUMN_UINT16 = 0x12,
+  SF3_COLUMN_UINT16 = 0x02,
   /// The column elements are stored in 32-bit unsigned format.
-  SF3_COLUMN_UINT32 = 0x14,
+  SF3_COLUMN_UINT32 = 0x04,
   /// The column elements are stored in 64-bit unsigned format.
-  SF3_COLUMN_UINT64 = 0x18,
+  SF3_COLUMN_UINT64 = 0x08,
+  /// The column elements are stored in 8-bit signed format.
+  SF3_COLUMN_INT8 = 0x11,
+  /// The column elements are stored in 16-bit signed format.
+  SF3_COLUMN_INT16 = 0x12,
+  /// The column elements are stored in 32-bit signed format.
+  SF3_COLUMN_INT32 = 0x14,
+  /// The column elements are stored in 64-bit signed format.
+  SF3_COLUMN_INT64 = 0x18,
   /// The column elements are stored in 16-bit IEEE half-precision
   /// float format.
   SF3_COLUMN_FLOAT16 = 0x22,
