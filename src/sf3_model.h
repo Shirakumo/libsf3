@@ -90,15 +90,14 @@ const struct sf3_vertices *sf3_model_vertices(const struct sf3_model *model){
 /// Returns the number of textures stored in the model.
 uint8_t sf3_model_texture_count(const struct sf3_model *model){
   uint8_t type = model->material_type;
-  return
-    (type >> 0) & 1 +
-    (type >> 1) & 1 +
-    (type >> 2) & 1 +
-    (type >> 3) & 1 +
-    (type >> 4) & 1 +
-    (type >> 5) & 1 +
-    (type >> 6) & 1 +
-    (type >> 7) & 1;
+  return ((type >> 0) & 1) +
+         ((type >> 1) & 1) +
+         ((type >> 2) & 1) +
+         ((type >> 3) & 1) +
+         ((type >> 4) & 1) +
+         ((type >> 5) & 1) +
+         ((type >> 6) & 1) +
+         ((type >> 7) & 1);
 }
 
 /// Returns the number of floats per vertex.
