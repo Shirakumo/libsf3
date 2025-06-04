@@ -74,23 +74,23 @@ struct PACK sf3_model{
 /// Note that this function does not perform any bounds checking
 /// whatsoever. It is up to you to ensure you do not call this with
 /// the last texture.
-const sf3_str16 *sf3_model_next_texture(const struct sf3_str16 *texture){
+static inline const sf3_str16 *sf3_model_next_texture(const struct sf3_str16 *texture){
   return (const sf3_str16 *)SF3_SKIP_STRP(texture);
 }
 
 /// Returns the faces array of the model.
-const struct sf3_faces *sf3_model_faces(const struct sf3_model *model){
+static inline const struct sf3_faces *sf3_model_faces(const struct sf3_model *model){
   return (const struct sf3_faces *)(((char*)model->textures)+model->material_size);
 }
 
 /// Returns the vertices array of the model.
-const struct sf3_vertices *sf3_model_vertices(const struct sf3_model *model){
+static inline const struct sf3_vertices *sf3_model_vertices(const struct sf3_model *model){
   const struct sf3_faces *faces = sf3_model_faces(model);
   return (const struct sf3_vertices *)(faces->faces+faces->count);
 }
 
 /// Returns the number of textures stored in the model.
-uint8_t sf3_model_texture_count(const struct sf3_model *model){
+static inline uint8_t sf3_model_texture_count(const struct sf3_model *model){
   uint8_t type = model->material_type;
   return ((type >> 0) & 1) +
          ((type >> 1) & 1) +
@@ -103,7 +103,7 @@ uint8_t sf3_model_texture_count(const struct sf3_model *model){
 }
 
 /// Returns the number of floats per vertex.
-uint8_t sf3_model_vertex_stride(const struct sf3_model *model){
+static inline uint8_t sf3_model_vertex_stride(const struct sf3_model *model){
   uint8_t type = model->vertex_format;
   return
     ((type >> 0) & 1) * 3 +
@@ -118,7 +118,7 @@ uint8_t sf3_model_vertex_stride(const struct sf3_model *model){
 /// type flags, only with a singular format type as outlined in the
 /// `sf3_vertex_format` enumeration.
 /// If the attribute is unknown, 0 is returned.
-uint8_t sf3_model_vertex_attribute_count(enum sf3_vertex_format format){
+static inline uint8_t sf3_model_vertex_attribute_count(enum sf3_vertex_format format){
   switch(format){
   case SF3_VERTEX_POSITION: return 3;
   case SF3_VERTEX_UV: return 2;
@@ -130,12 +130,12 @@ uint8_t sf3_model_vertex_attribute_count(enum sf3_vertex_format format){
 }
 
 /// Returns the number of vertices stored in the model.
-uint32_t sf3_model_vertex_count(const struct sf3_model *model){
+static inline uint32_t sf3_model_vertex_count(const struct sf3_model *model){
   return sf3_model_vertices(model)->count / sf3_model_vertex_stride(model);
 }
 
 /// Returns the material usage type for the given texture index in the model.
-enum sf3_material_type sf3_model_texture_material(const struct sf3_model *model, uint8_t index){
+static enum sf3_material_type sf3_model_texture_material(const struct sf3_model *model, uint8_t index){
   uint8_t type = model->material_type;
   for(uint8_t i=0; i<8; ++i){
     uint8_t bit = (1 << i);
@@ -152,7 +152,7 @@ enum sf3_material_type sf3_model_texture_material(const struct sf3_model *model,
 /// Note that you cannot call this with a combination of material
 /// types flags, only with a singular type as outlined in the
 /// `sf3_material_type` enumeration.
-const char *sf3_model_material_type(enum sf3_material_type type){
+static const char *sf3_model_material_type(enum sf3_material_type type){
   switch(type){
   case SF3_MATERIAL_ALBEDO: return "albedo";
   case SF3_MATERIAL_NORMAL: return "normal";

@@ -193,7 +193,7 @@ struct PACK sf3_vector_graphic{
 /// Note that this function does not perform any bounds checking
 /// whatsoever. It is up to you to ensure you do not call this with
 /// the last instruction of a vector graphic file.
-const struct sf3_vector_instruction *sf3_vector_graphic_next_instruction(const struct sf3_vector_instruction *instruction){
+static inline const struct sf3_vector_instruction *sf3_vector_graphic_next_instruction(const struct sf3_vector_instruction *instruction){
   const char *base = (char*)instruction;
   switch(instruction->type){
   case SF3_INSTRUCTION_RECTANGLE:
@@ -220,14 +220,14 @@ const struct sf3_vector_instruction *sf3_vector_graphic_next_instruction(const s
 }
 
 /// Returns the string to draw of a text instruction.
-const char *sf3_text_instruction_string(const struct sf3_text_instruction *instruction){
+static inline const char *sf3_text_instruction_string(const struct sf3_text_instruction *instruction){
   const sf3_str16 *string = (sf3_str16*)SF3_SKIP_STR(instruction->font);
   return string->str;
 }
 
 /// Returns a human-readable string description of the vector
 /// instruction type.
-const char *sf3_vector_instruction_type(enum sf3_vector_instruction_type type){
+static const char *sf3_vector_instruction_type(enum sf3_vector_instruction_type type){
   switch(type){
   case SF3_INSTRUCTION_LINE: return "line";
   case SF3_INSTRUCTION_RECTANGLE: return "rectangle";

@@ -86,22 +86,22 @@ struct PACK sf3_image{
 };
 
 /// Returns the number of bytes per channel.
-int sf3_image_channel_size(const struct sf3_image *image){
+static inline int sf3_image_channel_size(const struct sf3_image *image){
   return image->format & 0x0F;
 }
 
 /// Returns the number of channels per pixel.
-int sf3_image_channel_count(const struct sf3_image *image){
+static inline int sf3_image_channel_count(const struct sf3_image *image){
   return image->channels & 0x0F;
 }
 
 /// Returns the number of bytes per pixel.
-int sf3_image_pixel_stride(const struct sf3_image *image){
+static inline int sf3_image_pixel_stride(const struct sf3_image *image){
   return (image->channels & 0x0F) * (image->format & 0x0F);
 }
 
 /// Returns a human-readable string representation of the format.
-char *sf3_image_pixel_format(enum sf3_pixel_format format){
+static char *sf3_image_pixel_format(enum sf3_pixel_format format){
   switch(format){
   case SF3_PIXEL_INT8: return "int8";
   case SF3_PIXEL_INT16: return "int16";
@@ -119,7 +119,7 @@ char *sf3_image_pixel_format(enum sf3_pixel_format format){
 }
 
 /// Returns a human-readable string representation of the layout.
-char *sf3_image_channel_layout(enum sf3_channel_layout format){
+static inline char *sf3_image_channel_layout(enum sf3_channel_layout format){
   switch(format){
   case SF3_PIXEL_V: return "V";
   case SF3_PIXEL_VA: return "VA";

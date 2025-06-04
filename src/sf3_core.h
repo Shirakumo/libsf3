@@ -80,7 +80,7 @@ struct PACK sf3_identifier{
 /// valid, they may still be filled with completely bogus values. As
 /// such, this function makes no security guarantees whatsoever about
 /// the block of memory it is handed.
-int sf3_check(const void *addr, size_t size){
+static int sf3_check(const void *addr, size_t size){
   if(size < sizeof(struct sf3_identifier)) return 0;
   const struct sf3_identifier *identifier = (const struct sf3_identifier *)addr;
   const char magic[10] = SF3_MAGIC;

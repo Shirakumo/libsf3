@@ -110,7 +110,7 @@ struct PACK sf3_text{
 /// Note that this function does not perform any bounds checking
 /// whatsoever. It is up to you to ensure you do not call this with
 /// the last markup option.
-const struct sf3_markup *sf3_text_next_markup(const struct sf3_markup *markup){
+static inline const struct sf3_markup *sf3_text_next_markup(const struct sf3_markup *markup){
   const char *base = (char*)markup;
   switch(markup->option_type){
   case SF3_MARKUP_BOLD:
@@ -137,14 +137,14 @@ const struct sf3_markup *sf3_text_next_markup(const struct sf3_markup *markup){
 }
 
 /// Returns the raw textual contents.
-const char *sf3_text_string(const struct sf3_text *text){
+static inline const char *sf3_text_string(const struct sf3_text *text){
   const char *base = (char *)text->markup;
   base += text->markup_size;
   return ((sf3_str64*)base)->str;
 }
 
 /// Returns a human-readable string description of the markup option.
-const char *sf3_text_markup_option_type(enum sf3_markup_option_type type){
+static const char *sf3_text_markup_option_type(enum sf3_markup_option_type type){
   switch(type){
   case SF3_MARKUP_BOLD: return "bold";
   case SF3_MARKUP_ITALIC: return "italic";

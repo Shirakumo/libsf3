@@ -46,7 +46,7 @@ struct PACK sf3_archive{
 ///
 /// If the index is larger than the number of files in the archive,
 /// null is returned.
-const struct sf3_archive_meta *sf3_archive_meta_entry(const struct sf3_archive *archive, uint64_t index){
+static inline const struct sf3_archive_meta *sf3_archive_meta_entry(const struct sf3_archive *archive, uint64_t index){
   if(archive->count <= index) return 0;
   const char *base = (char *)&archive->entry_offset[archive->count];
   base += archive->entry_offset[index];
@@ -54,12 +54,12 @@ const struct sf3_archive_meta *sf3_archive_meta_entry(const struct sf3_archive *
 }
 
 /// Returns the C string for the mime-type
-const char *sf3_archive_meta_mime_type(const struct sf3_archive_meta *meta){
+static inline const char *sf3_archive_meta_mime_type(const struct sf3_archive_meta *meta){
   return meta->mime_type.str;
 }
 
 /// Returns the C string for the relative file path
-const char *sf3_archive_meta_path(const struct sf3_archive_meta *meta){
+static inline const char *sf3_archive_meta_path(const struct sf3_archive_meta *meta){
   return ((sf3_str16 *)(meta->mime_type.str + meta->mime_type.length))->str;
 }
 
@@ -67,7 +67,7 @@ const char *sf3_archive_meta_path(const struct sf3_archive_meta *meta){
 ///
 /// If the index is larger than the number of files in the archive,
 /// null is returned.
-const struct sf3_file *sf3_archive_file(const struct sf3_archive *archive, uint64_t index){
+static inline const struct sf3_file *sf3_archive_file(const struct sf3_archive *archive, uint64_t index){
   if(archive->count <= index) return 0;
   const char *base = (char *)&archive->entry_offset[0];
   base += archive->metadata_size;
