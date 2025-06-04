@@ -252,10 +252,10 @@ int view_table(struct sf3_table *table){
           printf("%16lu", *((uint64_t*)data));
           break;
         case SF3_COLUMN_INT8:
-          printf("%16d", *((int8_t*)data));
+          printf("%16hhd", *((int8_t*)data));
           break;
         case SF3_COLUMN_INT16:
-          printf("%16d", *((int16_t*)data));
+          printf("%16hd", *((int16_t*)data));
           break;
         case SF3_COLUMN_INT32:
           printf("%16d", *((int32_t*)data));
@@ -264,6 +264,7 @@ int view_table(struct sf3_table *table){
           printf("%16ld", *((int64_t*)data));
           break;
         case SF3_COLUMN_FLOAT16:
+          printf("%16x", *((uint16_t*)data));
           break;
         case SF3_COLUMN_FLOAT32:
           printf("%16.4f", *((float*)data));
