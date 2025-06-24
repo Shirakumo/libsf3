@@ -110,7 +110,7 @@ int view_log(struct sf3_log *log){
 int view_model(struct sf3_model *model){
   printf("%d textures, %u faces, %u vertices\n",
          sf3_model_texture_count(model),
-         sf3_model_faces(model)->count,
+         sf3_model_faces(model)->count / 3,
          sf3_model_vertex_count(model));
   printf("Vertex attributes:");
   if(model->vertex_format & SF3_VERTEX_POSITION) printf(" position");
