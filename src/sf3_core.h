@@ -166,10 +166,32 @@ static int sf3_verify(const void *addr, size_t size){
   int result = sf3_check(addr, size);
   if(result == 0) return 0;
 
-  const void *payload = (const void *)(((const uint8_t *)addr)+sizeof(struct sf3_identifier));
   const struct sf3_identifier *identifier = (const struct sf3_identifier *)addr;
+  const void *payload = (const void *)(((const uint8_t *)addr)+sizeof(struct sf3_identifier));
   if(identifier->checksum != sf3_compute_checksum(payload, size-sizeof(struct sf3_identifier)))
     return 0;
   return result;
+}
+
+/// Writes out the SF3 header and checksum.
+///
+/// The actual SF3 contents need to start at ADDR+16, and the header
+/// will be filled into the first 16 bytes of ADDR. The CRC32 checksum
+/// of the contents is computed for you.
+///
+/// This function returns zero if SIZE is less than 16.
+static int sf3_write_header(sf3_format_id format, void *addr, size_t size){
+  if(size<sizeof(struct sf3_identifier)) return 0;
+  
+  struct sf3_identifier *identifier = (struct sf3_identifier *)addr;
+  const void *payload = (const void *)(((const uint8_t *)addr)+sizeof(struct sf3_identifier));
+  const char magic[10] = SF3_MAGIC;
+  for(int i=0; i<10; ++i){
+    identifier->magic[i] = magic[i];
+  }
+  identifier->format_id = format;
+  identifier->checksum = sf3_compute_checksum(payload, size-sizeof(struct sf3_identifier));
+  identifier->null_terminator = 0;
+  return 1;
 }
 #endif
