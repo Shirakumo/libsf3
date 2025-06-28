@@ -41,7 +41,7 @@ enum sf3_vertex_format{
 };
 
 /// An array of faces
-struct PACK sf3_faces{
+struct SF3_PACK sf3_faces{
   /// The number of vertex indices stored.
   uint32_t count;
   /// The vertex indices, three of which make up a face.
@@ -49,7 +49,7 @@ struct PACK sf3_faces{
 };
 
 /// An array of vertex data.
-struct PACK sf3_vertices{
+struct SF3_PACK sf3_vertices{
   /// The number of floats stored.
   uint32_t count;
   /// The vertex data, packed according to the vertex format.
@@ -59,7 +59,7 @@ struct PACK sf3_vertices{
 /// A 3D model file.
 ///
 /// See SF3_FORMAT_ID_MODEL
-struct PACK sf3_model{
+struct SF3_PACK sf3_model{
   struct sf3_identifier identifier;
   /// The vertex attribute format description.
   uint8_t vertex_format;

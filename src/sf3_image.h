@@ -69,7 +69,7 @@ enum sf3_channel_layout{
 /// An image file.
 ///
 /// See SF3_FORMAT_ID_IMAGE
-struct PACK sf3_image{
+struct SF3_PACK sf3_image{
   struct sf3_identifier identifier;
   /// The width of the image.
   uint32_t width;

@@ -34,7 +34,7 @@ enum sf3_audio_format{
 /// An audio file.
 ///
 /// See SF3_FORMAT_ID_AUDIO
-struct PACK sf3_audio{
+struct SF3_PACK sf3_audio{
   struct sf3_identifier identifier;
   /// The samplerate of the audio in Hertz.
   uint32_t samplerate;

@@ -34,7 +34,7 @@ enum sf3_markup_option_type{
 /// Generic markup option.
 /// See the `option_type` for the specific kind of option this block
 /// might be describing.
-struct PACK sf3_markup{
+struct SF3_PACK sf3_markup{
   /// The starting index of the markup after and including which the
   /// markup should apply.
   uint64_t start;
@@ -47,7 +47,7 @@ struct PACK sf3_markup{
 };
 
 /// Description of a color change.
-struct PACK sf3_markup_color{
+struct SF3_PACK sf3_markup_color{
   struct sf3_markup markup;
   /// The red channel, in the range of [0,1].
   float r;
@@ -58,21 +58,21 @@ struct PACK sf3_markup_color{
 };
 
 /// Description of a font size change.
-struct PACK sf3_markup_size{
+struct SF3_PACK sf3_markup_size{
   struct sf3_markup markup;
   /// The size of the font in em units.
   float size;
 };
 
 /// Description of a heading.
-struct PACK sf3_markup_heading{
+struct SF3_PACK sf3_markup_heading{
   struct sf3_markup markup;
   /// The level of the heading as a positive integer.
   uint8_t level;
 };
 
 /// Description of a hyperlink.
-struct PACK sf3_markup_link{
+struct SF3_PACK sf3_markup_link{
   struct sf3_markup markup;
   /// The address of the link, either the address of a corresponding
   /// target markup, or an URL.
@@ -80,14 +80,14 @@ struct PACK sf3_markup_link{
 };
 
 /// Description of a link target.
-struct PACK sf3_markup_target{
+struct SF3_PACK sf3_markup_target{
   struct sf3_markup markup;
   /// The address of this target.
   sf3_str16 address;
 };
 
 /// Description of a font family change.
-struct PACK sf3_markup_font{
+struct SF3_PACK sf3_markup_font{
   struct sf3_markup markup;
   /// The name of the font-family to select.
   sf3_str16 font;
@@ -96,7 +96,7 @@ struct PACK sf3_markup_font{
 /// A text file.
 ///
 /// See SF3_FORMAT_ID_TEXT
-struct PACK sf3_text{
+struct SF3_PACK sf3_text{
   struct sf3_identifier identifier;
   /// The size of the markup options in bytes.
   uint64_t markup_size;

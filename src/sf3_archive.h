@@ -9,7 +9,7 @@
 ///
 /// See sf3_archive_meta_mime_type
 /// See sf3_archive_meta_path
-struct PACK sf3_archive_meta{
+struct SF3_PACK sf3_archive_meta{
   /// The last time the associated file was modified, as a UNIX timestamp
   int64_t modtime;
   /// The CRC32 checksum of the file payload
@@ -19,7 +19,7 @@ struct PACK sf3_archive_meta{
 };
 
 /// A single file from an archive.
-struct PACK sf3_file{
+struct SF3_PACK sf3_file{
   /// The length of the data payload in bytes.
   uint64_t length;
   /// The data payload of the file.
@@ -30,7 +30,7 @@ struct PACK sf3_file{
 /// An archive file.
 ///
 /// See SF3_FORMAT_ID_ARCHIVE
-struct PACK sf3_archive{
+struct SF3_PACK sf3_archive{
   struct sf3_identifier identifier;
   /// The number of files stored in the archive.
   /// This menas that there are this number of metadata intries and

@@ -9,7 +9,7 @@
 /// See sf3_log_entry_source
 /// See sf3_log_entry_category
 /// See sf3_log_entry_message
-struct PACK sf3_log_entry{
+struct SF3_PACK sf3_log_entry{
   /// The size of the log entry structure in bytes.
   uint32_t size;
   /// The time at which the log entry was created, in milliseconds
@@ -22,7 +22,7 @@ struct PACK sf3_log_entry{
 };
 
 /// A chunk of log entries in a log file.
-struct PACK sf3_log_chunk{
+struct SF3_PACK sf3_log_chunk{
   /// The size of the chunk structure in bytes.
   uint64_t size;
   /// The number of registered log entries.
@@ -34,7 +34,7 @@ struct PACK sf3_log_chunk{
 /// A log file.
 ///
 /// See SF3_FORMAT_ID_LOG
-struct PACK sf3_log{
+struct SF3_PACK sf3_log{
   struct sf3_identifier identifier;
   int64_t start;
   int64_t end;

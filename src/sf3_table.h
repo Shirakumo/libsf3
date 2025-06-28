@@ -46,7 +46,7 @@ enum sf3_column_type{
 };
 
 /// Description of a column within the table.
-struct PACK sf3_column_spec{
+struct SF3_PACK sf3_column_spec{
   /// The length of the column's values in bytes.
   uint32_t length;
   /// The type of data stored in the column.
@@ -59,7 +59,7 @@ struct PACK sf3_column_spec{
 /// A table file.
 ///
 /// See SF3_FORMAT_ID_TABLE
-struct PACK sf3_table{
+struct SF3_PACK sf3_table{
   struct sf3_identifier identifier;
   /// The number of columns in the table.
   uint16_t column_count;

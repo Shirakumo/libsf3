@@ -3,10 +3,10 @@
 #include <stdint.h>
 #include <stddef.h>
 
-#if __DOXYGEN__
-#define PACK
+#if defined(__DOXYGEN__)
+#  define SF3_PACK
 #else
-#define PACK __attribute__((packed))
+#  define SF3_PACK __attribute__((packed))
 #endif
 
 /// Type for a CRC32 checksum.
@@ -19,7 +19,7 @@ typedef uint8_t sf3_format_id;
 /// SF3 string with a maximum length of 2^8-1.
 /// The string is null-terminated, and the entire length of the char
 /// array including the null terminator is in the length field.
-typedef struct PACK sf3_str8{
+typedef struct SF3_PACK sf3_str8{
   uint8_t length;
   char str[];
 } sf3_str8;
@@ -27,7 +27,7 @@ typedef struct PACK sf3_str8{
 /// SF3 string with a maximum length of 2^16-1.
 /// The string is null-terminated, and the entire length of the char
 /// array including the null terminator is in the length field.
-typedef struct PACK sf3_str16{
+typedef struct SF3_PACK sf3_str16{
   uint16_t length;
   char str[];
 } sf3_str16;
@@ -35,7 +35,7 @@ typedef struct PACK sf3_str16{
 /// SF3 string with a maximum length of 2^32-1.
 /// The string is null-terminated, and the entire length of the char
 /// array including the null terminator is in the length field.
-typedef struct PACK sf3_str32{
+typedef struct SF3_PACK sf3_str32{
   uint32_t length;
   char str[];
 } sf3_str32;
@@ -43,7 +43,7 @@ typedef struct PACK sf3_str32{
 /// SF3 string with a maximum length of 2^64-1.
 /// The string is null-terminated, and the entire length of the char
 /// array including the null terminator is in the length field.
-typedef struct PACK sf3_str64{
+typedef struct SF3_PACK sf3_str64{
   uint64_t length;
   char str[];
 } sf3_str64;
@@ -60,7 +60,7 @@ typedef struct PACK sf3_str64{
 #define SF3_MAGIC {0x81, 0x53, 0x46, 0x33, 0x00, 0xE0, 0xD0, 0x0D, 0x0A, 0x0A}
 
 /// The basic header structure of every SF3 file.
-struct PACK sf3_identifier{
+struct SF3_PACK sf3_identifier{
   /// These magic bits must be the same as SF3_MAGIC.
   char magic[10];
   /// The ID of the actual file type contained within.

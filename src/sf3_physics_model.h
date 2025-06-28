@@ -21,7 +21,7 @@ enum sf3_physics_shape_type{
 
 /// An ellipsoid shape described by the radii along the principal
 /// axes.
-struct PACK sf3_shape_ellipsoid{
+struct SF3_PACK sf3_shape_ellipsoid{
   float transform[16];
   uint8_t type;
   /// The radius along X.
@@ -33,7 +33,7 @@ struct PACK sf3_shape_ellipsoid{
 };
 
 /// A box shape described by the half-widths along the principal axes.
-struct PACK sf3_shape_box{
+struct SF3_PACK sf3_shape_box{
   float transform[16];
   uint8_t type;
   /// The half-size in X.
@@ -45,7 +45,7 @@ struct PACK sf3_shape_box{
 };
 
 /// A cylindrical shape described by two radii and a half-height.
-struct PACK sf3_shape_cylinder{
+struct SF3_PACK sf3_shape_cylinder{
   float transform[16];
   uint8_t type;
   /// The radius of the cap in Y-.
@@ -57,7 +57,7 @@ struct PACK sf3_shape_cylinder{
 };
 
 /// A pill-box shape described by two radii and a half-height.
-struct PACK sf3_shape_pill{
+struct SF3_PACK sf3_shape_pill{
   float transform[16];
   uint8_t type;
   /// The radius of the sphere in Y-.
@@ -69,7 +69,7 @@ struct PACK sf3_shape_pill{
 };
 
 /// A convex hull described by its edge vertices.
-struct PACK sf3_shape_mesh{
+struct SF3_PACK sf3_shape_mesh{
   float transform[16];
   uint8_t type;
   /// The number of vertices stored.
@@ -86,7 +86,7 @@ struct PACK sf3_shape_mesh{
 /// (right-handed rule). The shape is then transformed by the encoded
 /// transform matrix to place it into the coordinate system of the
 /// entire physics-model.
-struct PACK sf3_physics_shape{
+struct SF3_PACK sf3_physics_shape{
   /// The affine transformation matrix of the shape stored as a 4x4
   /// matrix in row-major order.
   float transform[16];
@@ -98,7 +98,7 @@ struct PACK sf3_physics_shape{
 /// A physics model file.
 ///
 /// See SF3_FORMAT_ID_PHYSICS_MODEL
-struct PACK sf3_physics_model{
+struct SF3_PACK sf3_physics_model{
   struct sf3_identifier identifier;
   /// The mass of the entire model in Kg.
   float mass;

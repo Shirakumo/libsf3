@@ -27,7 +27,7 @@ enum sf3_vector_instruction_type{
 };
 
 /// Description of a point on the canvas.
-struct PACK sf3_point{
+struct SF3_PACK sf3_point{
   /// The X coordinate.
   float x;
   /// The Y coordinate.
@@ -35,7 +35,7 @@ struct PACK sf3_point{
 };
 
 /// Description of an extent on the canvas.
-struct PACK sf3_size{
+struct SF3_PACK sf3_size{
   /// The width in X.
   float w;
   /// The height in Y.
@@ -43,7 +43,7 @@ struct PACK sf3_size{
 };
 
 /// Description of a colour of a shape.
-struct PACK sf3_color{
+struct SF3_PACK sf3_color{
   /// The red channel, in the range of [0,1].
   float r;
   /// The green channel, in the range of [0,1].
@@ -55,7 +55,7 @@ struct PACK sf3_color{
 };
 
 /// Description of a shape's outline.
-struct PACK sf3_shape_outline{
+struct SF3_PACK sf3_shape_outline{
   /// The number of edges stored in the outline.
   uint16_t count;
   /// The edge points of the outline.
@@ -66,7 +66,7 @@ struct PACK sf3_shape_outline{
 #define SF3_SKIP_OUTLINE(OUTLINE) ((OUTLINE).edges+(OUTLINE).count)
 
 /// Description of a shape's bounds or extent on the canvas.
-struct PACK sf3_shape_bounds{
+struct SF3_PACK sf3_shape_bounds{
   /// The X coordinate of the lower left corner.
   float x;
   /// The Y coordinate of the lower left corner.
@@ -78,7 +78,7 @@ struct PACK sf3_shape_bounds{
 };
 
 /// Description of the fill parameters of a shape.
-struct PACK sf3_shape_fill{
+struct SF3_PACK sf3_shape_fill{
   /// The colour to fill the insides of the shape's outline with.
   struct sf3_color fill_color;
   /// The colour to fill the outline stroke of the shape with.
@@ -89,7 +89,7 @@ struct PACK sf3_shape_fill{
 
 /// An instruction to draw text.
 /// See `sf3_text_instruction_string`
-struct PACK sf3_text_instruction{
+struct SF3_PACK sf3_text_instruction{
   uint8_t type;
   /// The center point of the baseline of the first character.
   struct sf3_point point;
@@ -102,7 +102,7 @@ struct PACK sf3_text_instruction{
 };
 
 /// An instruction to draw a Bezier curve.
-struct PACK sf3_curve_instruction{
+struct SF3_PACK sf3_curve_instruction{
   uint8_t type;
   /// The shapes' drawing parameters.
   struct sf3_shape_fill fill;
@@ -113,7 +113,7 @@ struct PACK sf3_curve_instruction{
 };
 
 /// An instruction to draw a closed polygon.
-struct PACK sf3_polygon_instruction{
+struct SF3_PACK sf3_polygon_instruction{
   uint8_t type;
   /// The shapes' drawing parameters.
   struct sf3_shape_fill fill;
@@ -123,7 +123,7 @@ struct PACK sf3_polygon_instruction{
 };
 
 /// An instruction to draw a circle.
-struct PACK sf3_circle_instruction{
+struct SF3_PACK sf3_circle_instruction{
   uint8_t type;
   /// The shapes' drawing parameters.
   struct sf3_shape_fill fill;
@@ -132,7 +132,7 @@ struct PACK sf3_circle_instruction{
 };
 
 /// An instruction to draw a rectangle.
-struct PACK sf3_rectangle_instruction{
+struct SF3_PACK sf3_rectangle_instruction{
   uint8_t type;
   /// The shapes' drawing parameters.
   struct sf3_shape_fill fill;
@@ -141,7 +141,7 @@ struct PACK sf3_rectangle_instruction{
 };
 
 /// An instruction to draw a segmented line.
-struct PACK sf3_line_instruction{
+struct SF3_PACK sf3_line_instruction{
   uint8_t type;
   /// The colour to fill the stroke of the line with.
   struct sf3_color color;
@@ -153,7 +153,7 @@ struct PACK sf3_line_instruction{
 
 /// An instruction to apply a transformation matrix to the
 /// instructions following after this one.
-struct PACK sf3_matrix_instruction{
+struct SF3_PACK sf3_matrix_instruction{
   uint8_t type;
   /// The elements of the 3x2 transform matrix stored in row-major
   /// order.
@@ -162,13 +162,13 @@ struct PACK sf3_matrix_instruction{
 
 /// An instruction to apply an identity transformation matrix to the
 /// instructions folllowing after this one.
-struct PACK sf3_identity_instruction{
+struct SF3_PACK sf3_identity_instruction{
   uint8_t type;
 };
 
 /// Generic representation of a vector drawing instruction.
 /// See the type for the precise type stored within.
-struct PACK sf3_vector_instruction{
+struct SF3_PACK sf3_vector_instruction{
   /// See the `sf3_vector_instruction_type` enumeration for possible
   /// values.
   uint8_t type;
@@ -177,7 +177,7 @@ struct PACK sf3_vector_instruction{
 /// A vector graphic file.
 ///
 /// See SF3_FORMAT_ID_VECTOR_GRAPHIC
-struct PACK sf3_vector_graphic{
+struct SF3_PACK sf3_vector_graphic{
   struct sf3_identifier identifier;
   /// The width of the canvas in pixels.
   uint32_t width;
