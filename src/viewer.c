@@ -535,6 +535,9 @@ int main(int argc, char *argv[]){
       }
       if(!mime && !ext){
         printf("%s file (%s, %lu bytes)\n", sf3_kind(type), sf3_mime_type(type), size);
+        if(!sf3_verify(addr, size)){
+          printf("Warning: CRC32 checksum does not match!\n");
+        }
         view_file(addr, type);
       }
       if(mime){
