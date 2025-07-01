@@ -9,6 +9,13 @@
 #  define SF3_PACK __attribute__((packed))
 #endif
 
+#ifndef SF3_EXPORT
+#define SF3_EXPORT static
+#endif
+#ifndef SF3_INLINE
+#define SF3_INLINE static inline
+#endif
+
 /// Type for a CRC32 checksum.
 typedef uint32_t sf3_crc32_checksum;
 
@@ -84,7 +91,7 @@ struct SF3_PACK sf3_identifier{
 /// You will likely want to at least use sf3_verify instead, which will
 /// also compute the CRC32 checksum of the file contents to verify its
 /// integrity.
-static int sf3_check(const void *addr, size_t size){
+SF3_EXPORT int sf3_check(const void *addr, size_t size){
   if(size < sizeof(struct sf3_identifier)) return 0;
   const struct sf3_identifier *identifier = (const struct sf3_identifier *)addr;
   const char magic[10] = SF3_MAGIC;
@@ -142,7 +149,7 @@ const uint32_t sf3_crc32_tab[] = {
 };
 
 /// Computes a CRC32 checksum of the given block of memory.
-static sf3_crc32_checksum sf3_compute_checksum(const void *addr, size_t size){
+SF3_EXPORT sf3_crc32_checksum sf3_compute_checksum(const void *addr, size_t size){
   const uint8_t *data = (const uint8_t *)addr;
   sf3_crc32_checksum crc = 0xFFFFFFFF;
   for(size_t i=0; i<size; ++i){
@@ -162,7 +169,7 @@ static sf3_crc32_checksum sf3_compute_checksum(const void *addr, size_t size){
 /// the block of memory it is handed, other than that the CRC32
 /// checksum in the file header matches the checksum of the file
 /// contents.
-static int sf3_verify(const void *addr, size_t size){
+SF3_EXPORT int sf3_verify(const void *addr, size_t size){
   int result = sf3_check(addr, size);
   if(result == 0) return 0;
 
@@ -180,7 +187,7 @@ static int sf3_verify(const void *addr, size_t size){
 /// of the contents is computed for you.
 ///
 /// This function returns zero if SIZE is less than 16.
-static int sf3_write_header(sf3_format_id format, void *addr, size_t size){
+SF3_EXPORT int sf3_write_header(sf3_format_id format, void *addr, size_t size){
   if(size<sizeof(struct sf3_identifier)) return 0;
   
   struct sf3_identifier *identifier = (struct sf3_identifier *)addr;

@@ -74,7 +74,7 @@ struct SF3_PACK sf3_table{
 };
 
 /// Returns a pointer to the encoded table data.
-static inline const char *sf3_table_data(const struct sf3_table *table){
+SF3_INLINE const char *sf3_table_data(const struct sf3_table *table){
   return ((char*)table->columns)+table->spec_length;
 }
 
@@ -82,13 +82,13 @@ static inline const char *sf3_table_data(const struct sf3_table *table){
 /// Note that this function does not perform any bounds checking
 /// whatsoever. It is up to you to ensure you do not call this with
 /// the last column spec of a table.
-static inline const struct sf3_column_spec *sf3_table_next_column(const struct sf3_column_spec *column){
+SF3_INLINE const struct sf3_column_spec *sf3_table_next_column(const struct sf3_column_spec *column){
   return (struct sf3_column_spec *)SF3_SKIP_STR(column->name);
 }
 
 /// Returns the column spec at the requested index.
 /// If an invalid column index is given, null is returned instead.
-static inline const struct sf3_column_spec *sf3_table_column(const struct sf3_table *table, uint16_t column){
+SF3_INLINE const struct sf3_column_spec *sf3_table_column(const struct sf3_table *table, uint16_t column){
   if(table->column_count <= column) return 0;
   const struct sf3_column_spec *col = table->columns;
   for(uint16_t i=0; i<column; ++i){
@@ -99,7 +99,7 @@ static inline const struct sf3_column_spec *sf3_table_column(const struct sf3_ta
 
 /// Returns a pointer to the start of the given row.
 /// If an invalid row index is given, null is returned instead.
-static inline const char *sf3_table_row(const struct sf3_table *table, uint64_t row){
+SF3_INLINE const char *sf3_table_row(const struct sf3_table *table, uint64_t row){
   if(table->row_count <= row) return 0;
   return sf3_table_data(table)+(table->row_length*row);
 }
@@ -114,7 +114,7 @@ static inline const char *sf3_table_row(const struct sf3_table *table, uint64_t 
 /// the requested column. If you are reading out multiple rows of the
 /// same column, writing your own iteration with the cached offset of
 /// the column start would be much more efficient.
-static const char *sf3_table_cell(const struct sf3_table *table, uint64_t row, uint64_t column, const struct sf3_column_spec **spec){
+SF3_EXPORT const char *sf3_table_cell(const struct sf3_table *table, uint64_t row, uint64_t column, const struct sf3_column_spec **spec){
   if(table->column_count <= column) return 0;
   if(table->row_count <= row) return 0;
   const struct sf3_column_spec *col = table->columns;
@@ -128,18 +128,18 @@ static const char *sf3_table_cell(const struct sf3_table *table, uint64_t row, u
 }
 
 /// Returns the number of bytes per element of the given column.
-static inline uint8_t sf3_table_element_size(const struct sf3_column_spec *column){
+SF3_INLINE uint8_t sf3_table_element_size(const struct sf3_column_spec *column){
   return column->type & 0x0F;
 }
 
 /// Returns the number of elements in a cell of the given column.
-static inline uint32_t sf3_table_element_count(const struct sf3_column_spec *column){
+SF3_INLINE uint32_t sf3_table_element_count(const struct sf3_column_spec *column){
   if(column->type == SF3_COLUMN_STRING) return 1;
   return column->length / (column->type & 0x0F);
 }
 
 /// Returns a human-readable string description of the column type.
-static const char* sf3_table_column_type(enum sf3_column_type type){
+SF3_EXPORT const char* sf3_table_column_type(enum sf3_column_type type){
   switch(type){
   case SF3_COLUMN_UINT8: return "uint8";
   case SF3_COLUMN_UINT16: return "uint16";

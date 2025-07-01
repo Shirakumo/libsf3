@@ -11,7 +11,7 @@
 #include "sf3_vector_graphic.h"
 
 /// Returns a human-readable string description of the SF3 format_id.
-static char *sf3_kind(int type){
+SF3_EXPORT char *sf3_kind(int type){
   switch(type){
   case SF3_FORMAT_ID_ARCHIVE:
     return "Archive";
@@ -37,7 +37,7 @@ static char *sf3_kind(int type){
 }
 
 /// Returns the standard file type suffix for the given SF3 format_id.
-static char *sf3_file_type(int type){
+SF3_EXPORT char *sf3_file_type(int type){
   switch(type){
   case SF3_FORMAT_ID_ARCHIVE:
     return "ar.sf3";
@@ -63,7 +63,7 @@ static char *sf3_file_type(int type){
 }
 
 /// Returns the standard media mime-type for the given SF3 format_id.
-static char *sf3_mime_type(int type){
+SF3_EXPORT char *sf3_mime_type(int type){
   switch(type){
   case SF3_FORMAT_ID_ARCHIVE:
     return "application/x.sf3-archive";

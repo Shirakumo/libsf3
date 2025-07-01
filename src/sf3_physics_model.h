@@ -114,7 +114,7 @@ struct SF3_PACK sf3_physics_model{
 /// Note that this function does not perform any bounds checking
 /// whatsoever. It is up to you to ensure you do not call this with
 /// the last shape of a physics model.
-static inline const struct sf3_physics_shape *sf3_physics_model_next_shape(const struct sf3_physics_shape *shape){
+SF3_INLINE const struct sf3_physics_shape *sf3_physics_model_next_shape(const struct sf3_physics_shape *shape){
   const char *base = (char*)shape;
   switch(shape->type){
   case SF3_PHYSICS_SHAPE_ELLIPSOID:
@@ -134,7 +134,7 @@ static inline const struct sf3_physics_shape *sf3_physics_model_next_shape(const
 }
 
 /// Return a human-readable string description of the shape type.
-static const char *sf3_physics_shape_type(enum sf3_physics_shape_type type){
+SF3_EXPORT const char *sf3_physics_shape_type(enum sf3_physics_shape_type type){
   switch(type){
   case SF3_PHYSICS_SHAPE_ELLIPSOID: return "ellipsoid";
   case SF3_PHYSICS_SHAPE_BOX: return "box";

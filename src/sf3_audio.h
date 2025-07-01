@@ -52,22 +52,27 @@ struct SF3_PACK sf3_audio{
 };
 
 /// Returns the number of bytes per audio sample.
-static inline int sf3_audio_sample_size(const struct sf3_audio *audio){
+SF3_INLINE int sf3_audio_sample_size(const struct sf3_audio *audio){
   return audio->format & 0x0F;
 }
 
 /// Returns the number of bytes per audio frame.
-static inline int sf3_audio_frame_size(const struct sf3_audio *audio){
+SF3_INLINE int sf3_audio_frame_size(const struct sf3_audio *audio){
   return (audio->format & 0x0F) * audio->channels;
 }
 
+/// Returns the total number of samples of audio stored.
+SF3_INLINE int sf3_audio_sample_count(const struct sf3_audio *audio){
+  return audio->frame_count * audio->channels;
+}
+
 /// Returns the duration of the audio data in seconds.
-static inline float sf3_audio_duration(const struct sf3_audio *audio){
+SF3_INLINE float sf3_audio_duration(const struct sf3_audio *audio){
   return ((double)audio->frame_count) / audio->samplerate;
 }
 
 /// Returns a string descriptor of the format type.
-static char *sf3_audio_format(enum sf3_audio_format format){
+SF3_EXPORT char *sf3_audio_format(enum sf3_audio_format format){
   switch(format){
   case SF3_SAMPLE_ALAW: return "A-law";
   case SF3_SAMPLE_INT16: return "int16";

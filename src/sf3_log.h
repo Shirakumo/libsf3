@@ -43,17 +43,17 @@ struct SF3_PACK sf3_log{
 };
 
 /// Returns the string of the "source" for the entry.
-static inline const char *sf3_log_entry_source(const struct sf3_log_entry *entry){
+SF3_INLINE const char *sf3_log_entry_source(const struct sf3_log_entry *entry){
   return entry->source.str;
 }
 
 /// Returns the string of the "category" for the entry.
-static inline const char *sf3_log_entry_category(const struct sf3_log_entry *entry){
+SF3_INLINE const char *sf3_log_entry_category(const struct sf3_log_entry *entry){
   return ((sf3_str8 *)SF3_SKIP_STR(entry->source))->str;
 }
 
 /// Returns the string of the message for the entry.
-static inline const char *sf3_log_entry_message(const struct sf3_log_entry *entry){
+SF3_INLINE const char *sf3_log_entry_message(const struct sf3_log_entry *entry){
   return ((sf3_str16 *)SF3_SKIP_STRP((sf3_str8 *)SF3_SKIP_STR(entry->source)))->str;
 }
 
@@ -61,19 +61,19 @@ static inline const char *sf3_log_entry_message(const struct sf3_log_entry *entr
 /// Note that this function does not perform any bounds checking
 /// whatsoever. It is up to you to ensure you do not call this with
 /// the last entry of a chunk.
-static inline const struct sf3_log_entry *sf3_log_next_entry(const struct sf3_log_entry *entry){
+SF3_INLINE const struct sf3_log_entry *sf3_log_next_entry(const struct sf3_log_entry *entry){
   return (const struct sf3_log_entry*)(((char*)entry)+entry->size);
 }
 
 /// Returns the first entry of the chunk.
-static inline const struct sf3_log_entry *sf3_log_first_entry(const struct sf3_log_chunk *chunk){
+SF3_INLINE const struct sf3_log_entry *sf3_log_first_entry(const struct sf3_log_chunk *chunk){
   return (const struct sf3_log_entry*)chunk->entry_offset+chunk->entry_count;
 }
 
 /// Returns the log entry at the requested index.
 /// If the entry index is out of bounds for the chunk, null is
 /// returned instead.
-static inline const struct sf3_log_entry *sf3_log_entry(const struct sf3_log_chunk *chunk, uint32_t entry){
+SF3_INLINE const struct sf3_log_entry *sf3_log_entry(const struct sf3_log_chunk *chunk, uint32_t entry){
   if(chunk->entry_count <= entry) return 0;
   return (const struct sf3_log_entry *)(((char*)chunk)+chunk->entry_offset[entry]);
 }
@@ -82,12 +82,12 @@ static inline const struct sf3_log_entry *sf3_log_entry(const struct sf3_log_chu
 /// Note that this function does not perform any bounds checking
 /// whatsoever. It is up to you to ensure you do not call this with
 /// the last chunk of a log.
-static inline const struct sf3_log_chunk *sf3_log_next_chunk(const struct sf3_log_chunk *chunk){
+SF3_INLINE const struct sf3_log_chunk *sf3_log_next_chunk(const struct sf3_log_chunk *chunk){
   return (const struct sf3_log_chunk *)(((char*)chunk)+chunk->size);
 }
 
 /// Returns the number of log entries that can be stored in the chunk.
-static inline uint32_t sf3_log_chunk_capacity(const struct sf3_log_chunk *chunk){
+SF3_INLINE uint32_t sf3_log_chunk_capacity(const struct sf3_log_chunk *chunk){
   uint64_t end_of_offsets = chunk->entry_offset[0];
   uint64_t offsets_size = (end_of_offsets - 4 - 8);
   return offsets_size / sizeof(uint64_t);
@@ -95,7 +95,7 @@ static inline uint32_t sf3_log_chunk_capacity(const struct sf3_log_chunk *chunk)
 
 /// Returns the number of log entries that can still be added to the
 /// chunk before it runs out of capacity.
-static inline uint32_t sf3_log_chunk_remaining(const struct sf3_log_chunk *chunk){
+SF3_INLINE uint32_t sf3_log_chunk_remaining(const struct sf3_log_chunk *chunk){
   return sf3_log_chunk_capacity(chunk) - chunk->entry_count;
 }
 #endif
