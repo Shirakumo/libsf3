@@ -1,40 +1,9 @@
+#define SF3_NO_CUSTOM_ALLOCATOR
+#include "sf3_lib.h"
+#include "sf3_lib.c"
 #include <stdio.h>
 #include <string.h>
-#include <fcntl.h>
-#include <unistd.h>
 #include <time.h>
-#include <sys/mman.h>
-#include <sys/stat.h>
-#include "sf3.h"
-
-int map_file(char *file, void **addr, size_t *size){
-  struct stat stat;
-  int fd = open(file, O_RDONLY);
-  
-  if(fd == -1){
-    printf("Failed to open file.\n");
-    goto cleanup;
-  }
-  
-  if(fstat(fd, &stat) == -1){
-    printf("Failed to retrieve file size.\n");
-    goto cleanup;
-  }
-
-  *size = stat.st_size;
-  *addr = mmap(NULL, *size, PROT_READ, MAP_PRIVATE, fd, 0);
-  if(!*addr){
-    printf("Failed to mmap file.\n");
-    goto cleanup;
-  }
-
-  return fd;
-  
- cleanup:
-  if(*addr) munmap(*addr, *size);
-  if(0 <= fd) close(fd);
-  return -1;
-}
 
 int view_archive(struct sf3_archive *archive){
   printf("%lu files:\n",
@@ -523,33 +492,31 @@ int main(int argc, char *argv[]){
     }
   }
   for(int i=0; i<argc; ++i){
+    sf3_handle handle;
     void *addr;
     size_t size;
     if(!brief) printf("%s: ", argv[i]);
-    int fd = map_file(argv[i], &addr, &size);
-    if(0 <= fd){
-      int type = sf3_check(addr, size);
-      if(!type){
-        printf("Not a valid SF3 file\n");
-        return 0;
-      }
-      if(!mime && !ext){
-        printf("%s file (%s, %lu bytes)\n", sf3_kind(type), sf3_mime_type(type), size);
-        if(!sf3_verify(addr, size)){
-          printf("Warning: CRC32 checksum does not match!\n");
-        }
-        view_file(addr, type);
-      }
-      if(mime){
-        printf("%s", sf3_mime_type(type));
-      }
-      if(ext){
-        if(mime)printf(" ");
-        printf("%s/%s", sf3_file_type(type), sf3_file_type(0));
-      }
-      munmap(addr, size);
-      close(fd);
+    int type = sf3_open(argv[i], SF3_OPEN_READ_ONLY, &handle);
+    if(0 == type){
+      printf("%s\n", sf3_strerror(-1));
+      continue;
     }
+    addr = sf3_data(handle, &size);
+    if(!mime && !ext){
+      printf("%s file (%s, %lu bytes)\n", sf3_kind(type), sf3_mime_type(type), size);
+      if(!sf3_verify(addr, size)){
+        printf("Warning: CRC32 checksum does not match!\n");
+      }
+      view_file(addr, type);
+    }
+    if(mime){
+      printf("%s", sf3_mime_type(type));
+    }
+    if(ext){
+      if(mime)printf(" ");
+      printf("%s/%s", sf3_file_type(type), sf3_file_type(0));
+    }
+    sf3_close(handle);
     printf("\n");
   }
   return 0;
