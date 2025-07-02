@@ -14,7 +14,7 @@ docs:
 	$(MAKE) -C $(PREFIX) docs
 
 install:
-	$(MAKE) native
+	$(MAKE) build
 	$(MAKE) -C $(PREFIX) install
 
 .PHONY: build docs install
