@@ -42,10 +42,10 @@ typedef void *sf3_handle;
 /// no more memory available, or the file is not an actual SF3 file.
 /// Note that this will not perform a CRC32 checksum verification of
 /// the file.
-SF3_EXPORT int sf3_tell(char *path);
+SF3_EXPORT int sf3_tell(const char *path);
 
 /// 
-SF3_EXPORT int sf3_open(char *path, enum SF3_OPEN_MODE mode, sf3_handle *handle);
+SF3_EXPORT int sf3_open(const char *path, enum SF3_OPEN_MODE mode, sf3_handle *handle);
 
 /// 
 SF3_EXPORT void sf3_close(sf3_handle handle);
@@ -54,7 +54,7 @@ SF3_EXPORT void sf3_close(sf3_handle handle);
 SF3_EXPORT void *sf3_data(sf3_handle handle, size_t *size);
 
 /// 
-SF3_EXPORT int sf3_write(char *path, sf3_handle handle);
+SF3_EXPORT int sf3_write(const char *path, sf3_handle handle);
 
 #ifdef SF3_NO_CUSTOM_ALLOCATOR
 #define sf3_calloc calloc

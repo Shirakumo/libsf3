@@ -6,7 +6,7 @@
 #include <sys/stat.h>
 #include "sf3_lib.h"
 
-struct sf3_handle{
+struct handle{
   enum SF3_OPEN_MODE mode;
   int fd;
   size_t size;
@@ -14,7 +14,7 @@ struct sf3_handle{
 };
 
 
-SF3_EXPORT int sf3_tell(char *path){
+SF3_EXPORT int sf3_tell(const char *path){
   void *handle;
   if(!sf3_open(path, SF3_OPEN_READ_ONLY, &handle)){
     return 0;
@@ -26,8 +26,8 @@ SF3_EXPORT int sf3_tell(char *path){
   return res;
 }
 
-SF3_EXPORT int sf3_open(char *path, enum SF3_OPEN_MODE mode, sf3_handle *handle){
-  struct sf3_handle *h = (struct sf3_handle *)sf3_calloc(1, sizeof(struct sf3_handle));
+SF3_EXPORT int sf3_open(const char *path, enum SF3_OPEN_MODE mode, sf3_handle *handle){
+  struct handle *h = (struct handle *)sf3_calloc(1, sizeof(struct handle));
   if(!h) return -1;
 
   struct stat stat;
@@ -47,7 +47,7 @@ SF3_EXPORT int sf3_open(char *path, enum SF3_OPEN_MODE mode, sf3_handle *handle)
                  (mode)? (PROT_READ | PROT_WRITE) : PROT_READ,
                  (mode)? MAP_SHARED : MAP_PRIVATE,
                  h->fd, 0);
-  if(!h->addr){
+  if(h->addr == MAP_FAILED){
     goto cleanup;
   }
 
@@ -60,9 +60,9 @@ SF3_EXPORT int sf3_open(char *path, enum SF3_OPEN_MODE mode, sf3_handle *handle)
 }
 
 SF3_EXPORT void sf3_close(sf3_handle handle){
-  struct sf3_handle *h = (struct sf3_handle *)handle;
+  struct handle *h = (struct handle *)handle;
   if(h){
-    if(h->addr){
+    if(h->addr != MAP_FAILED){
       munmap(h->addr, h->size);
       h->addr = 0;
     }
@@ -77,7 +77,7 @@ SF3_EXPORT void sf3_close(sf3_handle handle){
 }
 
 SF3_EXPORT void *sf3_data(sf3_handle handle, size_t *size){
-  struct sf3_handle *h = (struct sf3_handle *)handle;
+  struct handle *h = (struct handle *)handle;
   if(h){
     *size = h->size;
     return h->addr;
@@ -85,8 +85,8 @@ SF3_EXPORT void *sf3_data(sf3_handle handle, size_t *size){
   return 0;
 }
 
-SF3_EXPORT int sf3_write(char *path, sf3_handle handle){
-  struct sf3_handle *h = (struct sf3_handle *)handle;
+SF3_EXPORT int sf3_write(const char *path, sf3_handle handle){
+  struct handle *h = (struct handle *)handle;
   if(!path){
     if(h->mode == SF3_OPEN_READ_WRITE){
       return msync(h->addr, h->size, MS_SYNC) == 0;
@@ -98,7 +98,7 @@ SF3_EXPORT int sf3_write(char *path, sf3_handle handle){
   }
 }
 
-#ifndef MIXED_NO_CUSTOM_ALLOCATOR
+#ifndef SF3_NO_CUSTOM_ALLOCATOR
 void *(*mixed_calloc)(size_t num, size_t size) = calloc;
 void (*mixed_free)(void *ptr) = free;
 #endif
