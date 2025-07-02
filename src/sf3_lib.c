@@ -198,6 +198,6 @@ SF3_EXPORT int sf3_write(const char *path, sf3_handle handle){
 }
 
 #ifndef SF3_NO_CUSTOM_ALLOCATOR
-void *(*mixed_calloc)(size_t num, size_t size) = calloc;
-void (*mixed_free)(void *ptr) = free;
+void *(*sf3_calloc)(size_t num, size_t size) = calloc;
+void (*sf3_free)(void *ptr) = free;
 #endif
