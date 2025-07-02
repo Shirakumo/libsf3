@@ -10,6 +10,8 @@
 #include "sf3_text.h"
 #include "sf3_vector_graphic.h"
 
+/// Computes the size of the sf3 file in bytes
+/// If the file does not have a valid format ID, 0 is returned.
 SF3_EXPORT size_t sf3_size(const struct sf3_identifier *identifier){
   switch(identifier->format_id){
   case SF3_FORMAT_ID_ARCHIVE:
