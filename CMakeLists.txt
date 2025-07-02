@@ -2,7 +2,8 @@ cmake_minimum_required(VERSION 3.2...3.30)
 project(sf3 C)
 
 option(BUILD_VIEWER "Build the file viewer" ON)
-option(BUILD_SHARED_LIBS "Build the sharde library" ON)
+option(BUILD_SHARED_LIBS "Build the shared library" ON)
+option(BUILD_TESTER "Build the tester application" ON)
 option(BUILD_DOCS "Build the documentation via Doxygen" ON)
 
 install(FILES "src/*.h" DESTINATION include/)
@@ -13,6 +14,14 @@ if(BUILD_VIEWER)
   set_property(TARGET sf3_viewer PROPERTY C_STANDARD 99)
   target_compile_options(sf3_viewer PRIVATE -fvisibility=hidden -g)
   install(TARGETS sf3_viewer DESTINATION bin/)
+endif()
+
+if(BUILD_TESTER)
+  add_executable(sf3_tester
+    "src/test.c")
+  set_property(TARGET sf3_tester PROPERTY C_STANDARD 99)
+  target_compile_options(sf3_tester PRIVATE -fvisibility=hidden -g)
+  install(TARGETS sf3_tester DESTINATION bin/)
 endif()
 
 if(BUILD_SHARED_LIBS)
