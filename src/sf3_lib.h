@@ -101,7 +101,11 @@ extern "C" {
   /// Create a handle from a given SF3 file payload in memory.
   ///
   /// This may be useful if you want to call sf3_write to serialize
-  /// the SF3 file back out to a file.
+  /// the SF3 file back out to a file. Note that the SIZE here should
+  /// be the size of the memory block at ADDR, and does not
+  /// necessarily have to correspond to the size of the file contents
+  /// (meaning you can over-allocate). The size of the file contents
+  /// are computed automatically when sf3_write is called.
   SF3_EXPORT int sf3_create(void *addr, size_t size, sf3_handle *handle);
 
   /// Write the SF3 file back out to a file.
@@ -122,7 +126,6 @@ extern "C" {
 #ifdef SF3_NO_CUSTOM_ALLOCATOR
 #define sf3_calloc calloc
 #define sf3_free free
-#define sf3_realloc realloc
 #else
   /// Allocates a new block of memory.
   /// 

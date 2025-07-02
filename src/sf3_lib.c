@@ -165,7 +165,7 @@ SF3_EXPORT int sf3_write(const char *path, sf3_handle handle){
     const void *payload = ((const uint8_t*)h->addr+sizeof(struct sf3_identifier));
     size_t size = sf3_size(id);
     
-    int fd = open(path, O_WRONLY | O_CREAT);
+    int fd = open(path, O_WRONLY | O_CREAT, 0644);
     if(fd == -1){
       err = SF3_OPEN_FAILED;
       return 0;

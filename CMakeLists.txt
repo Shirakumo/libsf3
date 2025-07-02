@@ -6,7 +6,8 @@ option(BUILD_SHARED_LIBS "Build the shared library" ON)
 option(BUILD_TESTER "Build the tester application" ON)
 option(BUILD_DOCS "Build the documentation via Doxygen" ON)
 
-install(FILES "src/*.h" DESTINATION include/)
+file(GLOB HEADERS "${PROJECT_SOURCE_DIR}/src/*.h")
+install(FILES ${HEADERS} TYPE INCLUDE)
 
 if(BUILD_VIEWER)
   add_executable(sf3_viewer
