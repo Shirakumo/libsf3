@@ -30,19 +30,32 @@ extern "C" {
 #include<stdio.h>
 
   enum sf3_open_mode{
+    /// Open the file for reading only.
     SF3_OPEN_READ_ONLY = 0,
+    /// Open the file for reading and writing.
+    /// Note however that if you write into the memory of the file, it
+    /// is not guaranteed that other applications will be able to see
+    /// the changes until after sf3_write has returned successfully.
     SF3_OPEN_READ_WRITE = 1,
   };
 
   enum sf3_error{
+    /// No error has occurred
     SF3_OK = 0,
+    /// The call to open failed. The file may not exist or you may
+    /// lack the necessary permissions.
     SF3_OPEN_FAILED,
+    /// A memory allocation failed.
     SF3_OUT_OF_MEMORY,
+    /// The file failed to map into memory.
     SF3_MMAP_FAILED,
+    /// An invalid sf3_handle was passed.
     SF3_INVALID_HANDLE,
+    /// The file write operation failed.
     SF3_WRITE_FAILED,
   };
 
+  /// Opaque representation of a file handle.
   typedef void *sf3_handle;
 
   /// Return the error code.
@@ -62,9 +75,13 @@ extern "C" {
 
   /// Opens the SF3 file at the given path.
   /// 
-  /// If successful returns a positive value and stores the handle in
+  /// If successful returns the format ID and stores the handle in
   /// the handle argument. You can then use sf3_data to retrieve the
-  /// actual sf3 file address and size.
+  /// actual sf3 file address and size. This will also already call
+  /// sf3_check for you, though not sf3_verify.
+  ///
+  /// If the file open fails, the application is out of memory, or the
+  /// file is not a valid SF3 file, zero is returned instead.
   SF3_EXPORT int sf3_open(const char *path, enum sf3_open_mode mode, sf3_handle *handle);
 
   /// Closes the file handle.
@@ -74,7 +91,10 @@ extern "C" {
   SF3_EXPORT void sf3_close(sf3_handle handle);
 
   /// Returns the address of the SF3 file payload and its size.
-  /// 
+  ///
+  /// The size parameter may be a null pointer, in which case the size
+  /// is not returned.
+  ///
   /// This may fail if the handle is invalid, in which case a null
   /// pointer is returned.
   SF3_EXPORT void *sf3_data(sf3_handle handle, size_t *size);

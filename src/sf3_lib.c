@@ -124,7 +124,7 @@ SF3_EXPORT void sf3_close(sf3_handle handle){
 SF3_EXPORT void *sf3_data(sf3_handle handle, size_t *size){
   struct handle *h = (struct handle *)handle;
   if(h){
-    *size = h->size;
+    if(size) *size = h->size;
     return h->addr;
   }
   err = SF3_INVALID_HANDLE;
