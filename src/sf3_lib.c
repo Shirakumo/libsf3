@@ -68,6 +68,7 @@ SF3_EXPORT int sf3_tell(const char *path){
 }
 
 SF3_EXPORT int sf3_open(const char *path, enum sf3_open_mode mode, sf3_handle *handle){
+  err = SF3_OK;
   struct handle *h = (struct handle *)sf3_calloc(1, sizeof(struct handle));
   if(!h){
     err = SF3_OUT_OF_MEMORY;
@@ -124,6 +125,7 @@ SF3_EXPORT void sf3_close(sf3_handle handle){
 }
 
 SF3_EXPORT void *sf3_data(sf3_handle handle, size_t *size){
+  err = SF3_OK;
   struct handle *h = (struct handle *)handle;
   if(h){
     if(size) *size = h->size;
@@ -134,6 +136,7 @@ SF3_EXPORT void *sf3_data(sf3_handle handle, size_t *size){
 }
 
 SF3_EXPORT int sf3_create(void *addr, size_t size, sf3_handle *handle){
+  err = SF3_OK;
   struct handle *h = (struct handle *)sf3_calloc(1, sizeof(struct handle));
   if(!h){
     err = SF3_OUT_OF_MEMORY;
@@ -148,6 +151,7 @@ SF3_EXPORT int sf3_create(void *addr, size_t size, sf3_handle *handle){
 }
 
 SF3_EXPORT int sf3_write(const char *path, sf3_handle handle){
+  err = SF3_OK;
   struct handle *h = (struct handle *)handle;
   struct sf3_identifier *id = (struct sf3_identifier *)h->addr;
   if(h->size < sizeof(struct sf3_identifier)){
