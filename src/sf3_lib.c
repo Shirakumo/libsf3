@@ -36,6 +36,7 @@ SF3_EXPORT enum sf3_error sf3_error(){
 }
 
 SF3_EXPORT const char *sf3_strerror(enum sf3_error error){
+  if(error == -1) error = sf3_error();
   switch(error){
   case SF3_OK:
     return "No error occurred.";
