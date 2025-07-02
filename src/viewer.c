@@ -1,6 +1,4 @@
-#define SF3_NO_CUSTOM_ALLOCATOR
 #include "sf3_lib.h"
-#include "sf3_lib.c"
 #include <stdio.h>
 #include <string.h>
 #include <time.h>

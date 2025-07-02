@@ -9,11 +9,20 @@ option(BUILD_DOCS "Build the documentation via Doxygen" ON)
 file(GLOB HEADERS "${PROJECT_SOURCE_DIR}/src/*.h")
 install(FILES ${HEADERS} TYPE INCLUDE)
 
+if(BUILD_SHARED_LIBS)
+  add_library(sf3 SHARED
+    "src/sf3_lib.c")
+  set_property(TARGET sf3 PROPERTY C_STANDARD 99)
+  target_compile_options(sf3 PRIVATE -fvisibility=hidden -O3 -g -DSF3_BUILD=1)
+  install(TARGETS sf3 DESTINATION lib/)
+endif()
+
 if(BUILD_VIEWER)
   add_executable(sf3_viewer
     "src/viewer.c")
   set_property(TARGET sf3_viewer PROPERTY C_STANDARD 99)
   target_compile_options(sf3_viewer PRIVATE -fvisibility=hidden -g)
+  target_link_libraries(sf3_viewer PRIVATE sf3)
   install(TARGETS sf3_viewer DESTINATION bin/)
 endif()
 
@@ -23,14 +32,6 @@ if(BUILD_TESTER)
   set_property(TARGET sf3_tester PROPERTY C_STANDARD 99)
   target_compile_options(sf3_tester PRIVATE -fvisibility=hidden -g)
   install(TARGETS sf3_tester DESTINATION bin/)
-endif()
-
-if(BUILD_SHARED_LIBS)
-  add_library(sf3 SHARED
-    "src/sf3_lib.c")
-  set_property(TARGET sf3 PROPERTY C_STANDARD 99)
-  target_compile_options(sf3 PRIVATE -fvisibility=hidden -O3 -g -DSF3_BUILD=1)
-  install(TARGETS sf3 DESTINATION lib/)
 endif()
 
 if(BUILD_DOCS)
