@@ -50,6 +50,8 @@ SF3_EXPORT const char *sf3_strerror(enum sf3_error error){
     return "Invalid sf3 file handle.";
   case SF3_WRITE_FAILED:
     return "Failed to write file.";
+  case SF3_INVALID_FILE:
+    return "Not a valid SF3 file.";
   default:
     return "Unknown error";
   }
@@ -99,8 +101,14 @@ SF3_EXPORT int sf3_open(const char *path, enum sf3_open_mode mode, sf3_handle *h
     goto cleanup;
   }
 
+  int type = sf3_check(h->addr, h->size);
+  if(!type){
+    err = SF3_INVALID_FILE;
+    goto cleanup;
+  }
+
   *handle = h;
-  return 1;
+  return type;
   
  cleanup:
   sf3_close(h);

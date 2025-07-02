@@ -52,6 +52,8 @@ extern "C" {
     SF3_INVALID_HANDLE,
     /// The file write operation failed.
     SF3_WRITE_FAILED,
+    /// The file is not a valid SF3 file.
+    SF3_INVALID_FILE,
   };
 
   /// Opaque representation of a file handle.
