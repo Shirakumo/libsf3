@@ -165,4 +165,12 @@ SF3_EXPORT const char *sf3_model_material_type(enum sf3_material_type type){
   default: return "Unknown";
   }
 }
+
+/// Computes the size of the model file in bytes
+SF3_EXPORT size_t sf3_model_size(const struct sf3_model *model){
+  const struct sf3_vertices *verts = sf3_model_vertices(model);
+  const void *start = (const void *)model;
+  const void *end = (const void *)verts;
+  return (end-start) + sizeof(uint32_t) + verts->count * sizeof(float);
+}
 #endif

@@ -135,4 +135,10 @@ SF3_INLINE char *sf3_image_channel_layout(enum sf3_channel_layout format){
   default: return "Unknown";
   }
 }
+
+/// Computes the size of the image file in bytes
+SF3_EXPORT size_t sf3_image_size(const struct sf3_image *image){
+  return sizeof(struct sf3_image)
+    + sf3_image_pixel_stride(image) * image->width * image->height * image->depth;
+}
 #endif

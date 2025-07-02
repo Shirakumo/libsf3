@@ -75,4 +75,13 @@ SF3_INLINE const struct sf3_file *sf3_archive_file(const struct sf3_archive *arc
   base = (char*)(offsets+archive->count);
   return (const struct sf3_file *)(base + offsets[index]);
 }
+
+/// Computes the size of the archive file in bytes
+SF3_EXPORT size_t sf3_archive_size(const struct sf3_archive *archive){
+  if(archive->count == 0) return sizeof(struct sf3_archive);
+  const struct sf3_file *file = sf3_archive_file(archive, archive->count-1);
+  const void *start = (const void *)archive;
+  const void *end = (const void *)file;
+  return (end-start)+sizeof(uint64_t)+file->length;
+}
 #endif

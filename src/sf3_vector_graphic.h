@@ -240,4 +240,15 @@ SF3_EXPORT const char *sf3_vector_instruction_type(enum sf3_vector_instruction_t
   default: return "Unknown";
   }
 }
+
+/// Computes the size of the vector graphic file in bytes
+SF3_EXPORT size_t sf3_vector_graphic_size(const struct sf3_vector_graphic *vector_graphic){
+  const struct sf3_vector_instruction *inst = &vector_graphic->instructions[0];
+  for(uint32_t i=0; i<vector_graphic->count; ++i){
+    inst = sf3_vector_graphic_next_instruction(inst);
+  }
+  const void *start = (const void *)vector_graphic;
+  const void *end = (const void *)inst;
+  return (end-start);
+}
 #endif

@@ -144,4 +144,16 @@ SF3_EXPORT const char *sf3_physics_shape_type(enum sf3_physics_shape_type type){
   default: return "Unknown";
   }
 }
+
+/// Computes the size of the physics model file in bytes
+SF3_EXPORT size_t sf3_physics_model_size(const struct sf3_physics_model *physics_model){
+  if(physics_model->shape_count == 0) return sizeof(struct sf3_physics_model);
+  const struct sf3_physics_shape *shape = &physics_model->shapes[0];
+  for(uint16_t i=0; i<physics_model->shape_count; ++i){
+    shape = sf3_physics_model_next_shape(shape);
+  }
+  const void *start = (const void *)physics_model;
+  const void *end = (const void *)shape;
+  return (end-start);
+}
 #endif

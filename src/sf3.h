@@ -10,6 +10,31 @@
 #include "sf3_text.h"
 #include "sf3_vector_graphic.h"
 
+SF3_EXPORT size_t sf3_size(const struct sf3_identifier *identifier){
+  switch(identifier->format_id){
+  case SF3_FORMAT_ID_ARCHIVE:
+    return sf3_archive_size((struct sf3_archive *)identifier);
+  case SF3_FORMAT_ID_AUDIO:
+    return sf3_audio_size((struct sf3_audio *)identifier);
+  case SF3_FORMAT_ID_IMAGE:
+    return sf3_image_size((struct sf3_image *)identifier);
+  case SF3_FORMAT_ID_LOG:
+    return sf3_log_size((struct sf3_log *)identifier);
+  case SF3_FORMAT_ID_MODEL:
+    return sf3_model_size((struct sf3_model *)identifier);
+  case SF3_FORMAT_ID_PHYSICS_MODEL:
+    return sf3_physics_model_size((struct sf3_physics_model *)identifier);
+  case SF3_FORMAT_ID_TABLE:
+    return sf3_table_size((struct sf3_table *)identifier);
+  case SF3_FORMAT_ID_TEXT:
+    return sf3_text_size((struct sf3_text *)identifier);
+  case SF3_FORMAT_ID_VECTOR_GRAPHIC:
+    return sf3_vector_graphic_size((struct sf3_vector_graphic *)identifier);
+  default:
+    return 0;
+  }
+}
+
 /// Returns a human-readable string description of the SF3 format_id.
 SF3_EXPORT char *sf3_kind(int type){
   switch(type){

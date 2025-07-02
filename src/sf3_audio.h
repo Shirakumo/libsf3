@@ -88,4 +88,10 @@ SF3_EXPORT char *sf3_audio_format(enum sf3_audio_format format){
   default: return "Unknown";
   }
 }
+
+/// Computes the size of the audio file in bytes
+SF3_EXPORT size_t sf3_audio_size(const struct sf3_audio *audio){
+  return sizeof(struct sf3_audio)
+    + sf3_audio_sample_count(audio) * sf3_audio_sample_size(audio);
+}
 #endif

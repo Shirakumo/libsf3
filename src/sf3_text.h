@@ -160,4 +160,14 @@ SF3_EXPORT const char *sf3_text_markup_option_type(enum sf3_markup_option_type t
   default: return "Unknown";
   }
 }
+
+/// Computes the size of the text file in bytes
+SF3_EXPORT size_t sf3_text_size(const struct sf3_text *text){
+  const char *base = (char *)text->markup;
+  base += text->markup_size;
+  const sf3_str64 *str = ((sf3_str64*)base);
+  const void *start = (const void *)text;
+  const void *end = (const void *)(str->str+str->length);
+  return (end-start);
+}
 #endif

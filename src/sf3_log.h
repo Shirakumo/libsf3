@@ -98,4 +98,16 @@ SF3_INLINE uint32_t sf3_log_chunk_capacity(const struct sf3_log_chunk *chunk){
 SF3_INLINE uint32_t sf3_log_chunk_remaining(const struct sf3_log_chunk *chunk){
   return sf3_log_chunk_capacity(chunk) - chunk->entry_count;
 }
+
+/// Computes the size of the log file in bytes
+SF3_EXPORT size_t sf3_log_size(const struct sf3_log *log){
+  if(log->chunk_count == 0) return sizeof(struct sf3_log);
+  const struct sf3_log_chunk *last = &log->chunks[0];
+  for(uint16_t i=0; i<=log->chunk_count; ++i){
+    last = sf3_log_next_chunk(last);
+  }
+  const void *start = (const void *)log;
+  const void *end = (const void *)last;
+  return (end-start);
+}
 #endif

@@ -159,4 +159,12 @@ SF3_EXPORT const char* sf3_table_column_type(enum sf3_column_type type){
   default: return "Unknown";
   }
 }
+
+/// Computes the size of the table file in bytes
+SF3_EXPORT size_t sf3_table_size(const struct sf3_table *table){
+  const char *data = sf3_table_data(table);
+  const void *start = (const void *)table;
+  const void *end = (const void *)(data + table->row_length * table->row_count);
+  return (end-start);
+}
 #endif
