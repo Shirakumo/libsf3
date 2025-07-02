@@ -27,7 +27,6 @@ extern "C" {
 #  define SF3_EXPORT
 #endif
 #include "sf3.h"
-#include<stdio.h>
 
   enum sf3_open_mode{
     /// Open the file for reading only.
